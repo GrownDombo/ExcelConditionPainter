@@ -83,6 +83,14 @@ Excel 파일을 불러온 뒤, 사용자가 지정한 조건에 따라 데이터
 
 ---
 
+## 상세 사용법
+
+화면별 설정 방법과 예시를 포함한 상세 사용법은 아래 글에서 확인할 수 있습니다.
+
+[Excel 조건부 표시 프로그램 사용법](https://growndombo.tistory.com/entry/Excel-%EC%A1%B0%EA%B1%B4%EB%B6%80-%ED%91%9C%EC%8B%9C-%ED%94%84%EB%A1%9C%EA%B7%B8%EB%9E%A8-%EC%82%AC%EC%9A%A9%EB%B2%95)
+
+---
+
 ## 설치 파일 빌드
 
 설치 파일은 `ExcelConditionPainter.Setup` 프로젝트를 통해 생성합니다.
