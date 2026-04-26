@@ -1,0 +1,32 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.14.36511.14
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExcelConditionPainter", "ExcelConditionPainter\ExcelConditionPainter.csproj", "{C9FF43F3-C745-4539-BC30-4D11A0A91462}"
+EndProject
+Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "ExcelConditionPainter.Setup", "ExcelConditionPainter.Setup\ExcelConditionPainter.Setup.vdproj", "{95BC7763-0734-6BB8-06F6-2DB4EC5657D3}"
+	ProjectSection(ProjectDependencies) = postProject
+		{C9FF43F3-C745-4539-BC30-4D11A0A91462} = {C9FF43F3-C745-4539-BC30-4D11A0A91462}
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{C9FF43F3-C745-4539-BC30-4D11A0A91462}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C9FF43F3-C745-4539-BC30-4D11A0A91462}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C9FF43F3-C745-4539-BC30-4D11A0A91462}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C9FF43F3-C745-4539-BC30-4D11A0A91462}.Release|Any CPU.Build.0 = Release|Any CPU
+		{95BC7763-0734-6BB8-06F6-2DB4EC5657D3}.Debug|Any CPU.ActiveCfg = Debug
+		{95BC7763-0734-6BB8-06F6-2DB4EC5657D3}.Release|Any CPU.ActiveCfg = Release
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {85D08F4A-A541-432F-880E-4B3F0C7FAB54}
+	EndGlobalSection
+EndGlobal

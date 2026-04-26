@@ -1,0 +1,39 @@
+# Visual Studio
+.vs/
+**/.vs/
+*.user
+*.suo
+*.rsuser
+*.sln.docstates
+
+# Build outputs
+[Bb]in/
+[Oo]bj/
+[Dd]ebug/
+[Rr]elease/
+x64/
+x86/
+[Aa][Rr][Mm]/
+[Aa][Rr][Mm]64/
+
+# NuGet packages.config restore folder
+packages/
+!**/packages.config
+
+# Setup project outputs
+*.msi
+setup.exe
+
+# Logs and temp files
+*.log
+*.tmp
+*.cache
+
+# App export output
+ExcelPainter/
+
+# OS/editor noise
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
