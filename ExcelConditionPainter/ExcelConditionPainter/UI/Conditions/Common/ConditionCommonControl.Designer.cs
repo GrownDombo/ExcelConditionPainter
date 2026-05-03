@@ -33,7 +33,7 @@ namespace ExcelConditionPainter
             this.mainLayoutPanel = new System.Windows.Forms.TableLayoutPanel();
             this.deleteButton = new System.Windows.Forms.Button();
             this.priorityLevelInput = new System.Windows.Forms.NumericUpDown();
-            this.colorComboBox = new GDombo_CustomControl.ColorComboBox();
+            this.colorComboBox = new WinFormsCustomControls.ColorComboBox();
             this.conditionToolTip = new System.Windows.Forms.ToolTip(this.components);
             this.levelLabel = new System.Windows.Forms.Label();
             this.mainLayoutPanel.SuspendLayout();
@@ -43,17 +43,23 @@ namespace ExcelConditionPainter
             // paintTargetButton
             // 
             this.paintTargetButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
+            this.paintTargetButton.BackColor = System.Drawing.Color.White;
+            this.paintTargetButton.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(156)))), ((int)(((byte)(163)))), ((int)(((byte)(175)))));
+            this.paintTargetButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.paintTargetButton.Font = new System.Drawing.Font("Malgun Gothic", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
+            this.paintTargetButton.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(15)))), ((int)(((byte)(118)))), ((int)(((byte)(110)))));
             this.paintTargetButton.Location = new System.Drawing.Point(77, 3);
             this.paintTargetButton.Margin = new System.Windows.Forms.Padding(0, 3, 3, 3);
             this.paintTargetButton.Name = "paintTargetButton";
             this.paintTargetButton.Size = new System.Drawing.Size(47, 24);
             this.paintTargetButton.TabIndex = 3;
             this.paintTargetButton.Text = "Font";
-            this.paintTargetButton.UseVisualStyleBackColor = true;
+            this.paintTargetButton.UseVisualStyleBackColor = false;
             this.paintTargetButton.Click += new System.EventHandler(this.paintTargetButton_Click);
             // 
             // mainLayoutPanel
             // 
+            this.mainLayoutPanel.BackColor = System.Drawing.Color.White;
             this.mainLayoutPanel.ColumnCount = 5;
             this.mainLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
             this.mainLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 45F));
@@ -76,20 +82,29 @@ namespace ExcelConditionPainter
             // deleteButton
             // 
             this.deleteButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
+            this.deleteButton.BackColor = System.Drawing.Color.White;
+            this.deleteButton.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(229)))), ((int)(((byte)(231)))), ((int)(((byte)(235)))));
+            this.deleteButton.FlatAppearance.BorderSize = 0;
+            this.deleteButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.deleteButton.Image = global::ExcelConditionPainter.Properties.Resources.Delete;
+            this.deleteButton.ImageAlign = System.Drawing.ContentAlignment.MiddleCenter;
             this.deleteButton.Location = new System.Drawing.Point(191, 0);
             this.deleteButton.Margin = new System.Windows.Forms.Padding(0);
             this.deleteButton.Name = "deleteButton";
+            this.deleteButton.Padding = new System.Windows.Forms.Padding(0);
             this.deleteButton.Size = new System.Drawing.Size(30, 30);
             this.deleteButton.TabIndex = 3;
-            this.deleteButton.UseVisualStyleBackColor = true;
+            this.deleteButton.TextImageRelation = System.Windows.Forms.TextImageRelation.Overlay;
+            this.deleteButton.UseVisualStyleBackColor = false;
             this.deleteButton.Click += new System.EventHandler(this.deleteButton_Click);
             // 
             // priorityLevelInput
             // 
             this.priorityLevelInput.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
-            this.priorityLevelInput.Font = new System.Drawing.Font("돋움", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
+            this.priorityLevelInput.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.priorityLevelInput.Font = new System.Drawing.Font("Malgun Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
             this.priorityLevelInput.Location = new System.Drawing.Point(35, 4);
+            this.priorityLevelInput.Margin = new System.Windows.Forms.Padding(3);
             this.priorityLevelInput.Maximum = new decimal(new int[] {
             10,
             0,
@@ -106,21 +121,25 @@ namespace ExcelConditionPainter
             this.colorComboBox.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
             this.colorComboBox.DropDownHeight = 1;
             this.colorComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.colorComboBox.Font = new System.Drawing.Font("Malgun Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
             this.colorComboBox.FormattingEnabled = true;
             this.colorComboBox.IntegralHeight = false;
             this.colorComboBox.Location = new System.Drawing.Point(130, 4);
+            this.colorComboBox.Margin = new System.Windows.Forms.Padding(3);
             this.colorComboBox.Name = "colorComboBox";
             this.colorComboBox.SelectedColor = System.Drawing.Color.Red;
-            this.colorComboBox.Size = new System.Drawing.Size(58, 22);
+            this.colorComboBox.Size = new System.Drawing.Size(58, 24);
             this.colorComboBox.TabIndex = 6;
             // 
             // levelLabel
             // 
             this.levelLabel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
             this.levelLabel.AutoSize = true;
-            this.levelLabel.Location = new System.Drawing.Point(3, 9);
+            this.levelLabel.Font = new System.Drawing.Font("Malgun Gothic", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
+            this.levelLabel.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(75)))), ((int)(((byte)(85)))), ((int)(((byte)(99)))));
+            this.levelLabel.Location = new System.Drawing.Point(3, 8);
             this.levelLabel.Name = "levelLabel";
-            this.levelLabel.Size = new System.Drawing.Size(26, 12);
+            this.levelLabel.Size = new System.Drawing.Size(26, 15);
             this.levelLabel.TabIndex = 7;
             this.levelLabel.Text = "Lv :";
             // 
@@ -128,8 +147,9 @@ namespace ExcelConditionPainter
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.BackColor = System.Drawing.Color.White;
             this.Controls.Add(this.mainLayoutPanel);
-            this.Font = new System.Drawing.Font("돋움", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
+            this.Font = new System.Drawing.Font("Malgun Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
             this.Name = "ConditionCommonControl";
             this.Size = new System.Drawing.Size(221, 30);
             this.mainLayoutPanel.ResumeLayout(false);
@@ -145,7 +165,7 @@ namespace ExcelConditionPainter
         private System.Windows.Forms.Button deleteButton;
         private System.Windows.Forms.ToolTip conditionToolTip;
         private System.Windows.Forms.NumericUpDown priorityLevelInput;
-        private GDombo_CustomControl.ColorComboBox colorComboBox;
+        private WinFormsCustomControls.ColorComboBox colorComboBox;
         private System.Windows.Forms.Label levelLabel;
     }
 }

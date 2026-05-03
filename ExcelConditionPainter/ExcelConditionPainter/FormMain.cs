@@ -39,6 +39,7 @@ namespace ExcelConditionPainter
 
             sourceFilePath = string.Empty;
             conditionContext = null;
+            UpdateCurrentFileLabel();
         }
 
         /// <summary>
@@ -73,6 +74,7 @@ namespace ExcelConditionPainter
             }
 
             Text = $"Condition Excel Painter - {sourceFilePath}";
+            UpdateCurrentFileLabel();
             mainGridView.DataSource = excelWorkbookService.LoadFileToDataTable(sourceFilePath);
 
             using (FormSetConditions formDataDetails = new FormSetConditions(mainGridView))
@@ -172,6 +174,13 @@ namespace ExcelConditionPainter
         /// <summary>
         /// Ctrl+F 단축키로 검색창을 열거나 이미 열린 검색창에 포커스를 줍니다.
         /// </summary>
+        private void UpdateCurrentFileLabel()
+        {
+            currentFileLabel.Text = string.IsNullOrEmpty(sourceFilePath)
+                ? "No file opened"
+                : $"Current file: {Path.GetFileName(sourceFilePath)}";
+        }
+
         protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
         {
             if (keyData == (Keys.Control | Keys.F))

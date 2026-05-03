@@ -29,7 +29,7 @@ namespace ExcelConditionPainter
         private void InitializeComponent()
         {
             this.conditionCommonControl = new ExcelConditionPainter.ConditionCommonControl();
-            this.selectableOptionsComboBox = new GDombo_CustomControl.CheckBoxComboBox();
+            this.selectableOptionsComboBox = new WinFormsCustomControls.CheckBoxComboBox();
             this.conditionDescriptionLabel = new System.Windows.Forms.Label();
             this.peopleLimitLabel = new System.Windows.Forms.Label();
             this.peopleLimitInput = new System.Windows.Forms.NumericUpDown();
@@ -40,9 +40,9 @@ namespace ExcelConditionPainter
             // 
             this.conditionCommonControl.PaintTarget = ExcelConditionPainter.PaintTarget.Fill;
             this.conditionCommonControl.Dock = System.Windows.Forms.DockStyle.Right;
-            this.conditionCommonControl.Font = new System.Drawing.Font("돋움", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
+            this.conditionCommonControl.Font = new System.Drawing.Font("Malgun Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
             this.conditionCommonControl.PriorityLevel = 1;
-            this.conditionCommonControl.Location = new System.Drawing.Point(485, 0);
+            this.conditionCommonControl.Location = new System.Drawing.Point(545, 0);
             this.conditionCommonControl.Name = "ConditionCommon";
             this.conditionCommonControl.SelectedColor = System.Drawing.Color.Yellow;
             this.conditionCommonControl.Size = new System.Drawing.Size(215, 30);
@@ -54,41 +54,48 @@ namespace ExcelConditionPainter
             this.selectableOptionsComboBox.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
             this.selectableOptionsComboBox.DropDownHeight = 1;
             this.selectableOptionsComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.selectableOptionsComboBox.Font = new System.Drawing.Font("Malgun Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
             this.selectableOptionsComboBox.FormattingEnabled = true;
             this.selectableOptionsComboBox.IntegralHeight = false;
             this.selectableOptionsComboBox.Location = new System.Drawing.Point(4, 4);
             this.selectableOptionsComboBox.Name = "selectableOptionsComboBox";
-            this.selectableOptionsComboBox.Size = new System.Drawing.Size(90, 22);
+            this.selectableOptionsComboBox.Size = new System.Drawing.Size(90, 24);
             this.selectableOptionsComboBox.TabIndex = 2;
             // 
             // conditionDescriptionLabel
             // 
             this.conditionDescriptionLabel.AutoSize = true;
-            this.conditionDescriptionLabel.Location = new System.Drawing.Point(97, 10);
+            this.conditionDescriptionLabel.Font = new System.Drawing.Font("Malgun Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
+            this.conditionDescriptionLabel.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(55)))), ((int)(((byte)(65)))), ((int)(((byte)(81)))));
+            this.conditionDescriptionLabel.Location = new System.Drawing.Point(97, 8);
             this.conditionDescriptionLabel.Name = "conditionDescriptionLabel";
-            this.conditionDescriptionLabel.Size = new System.Drawing.Size(165, 12);
+            this.conditionDescriptionLabel.Size = new System.Drawing.Size(187, 15);
             this.conditionDescriptionLabel.TabIndex = 8;
             this.conditionDescriptionLabel.Text = "옵션을 구입한 사람 중 선착순";
             // 
             // peopleLimitLabel
             // 
             this.peopleLimitLabel.AutoSize = true;
-            this.peopleLimitLabel.Location = new System.Drawing.Point(324, 9);
+            this.peopleLimitLabel.Font = new System.Drawing.Font("Malgun Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
+            this.peopleLimitLabel.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(55)))), ((int)(((byte)(65)))), ((int)(((byte)(81)))));
+            this.peopleLimitLabel.Location = new System.Drawing.Point(384, 8);
             this.peopleLimitLabel.Name = "peopleLimitLabel";
-            this.peopleLimitLabel.Size = new System.Drawing.Size(17, 12);
+            this.peopleLimitLabel.Size = new System.Drawing.Size(20, 15);
             this.peopleLimitLabel.TabIndex = 12;
             this.peopleLimitLabel.Text = "명";
             // 
             // peopleLimitInput
             // 
-            this.peopleLimitInput.Location = new System.Drawing.Point(266, 5);
+            this.peopleLimitInput.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.peopleLimitInput.Font = new System.Drawing.Font("Malgun Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
+            this.peopleLimitInput.Location = new System.Drawing.Point(326, 4);
             this.peopleLimitInput.Minimum = new decimal(new int[] {
             1,
             0,
             0,
             0});
             this.peopleLimitInput.Name = "peopleLimitInput";
-            this.peopleLimitInput.Size = new System.Drawing.Size(55, 21);
+            this.peopleLimitInput.Size = new System.Drawing.Size(55, 23);
             this.peopleLimitInput.TabIndex = 11;
             this.peopleLimitInput.Value = new decimal(new int[] {
             50,
@@ -100,13 +107,16 @@ namespace ExcelConditionPainter
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.BackColor = System.Drawing.Color.White;
             this.Controls.Add(this.peopleLimitLabel);
             this.Controls.Add(this.peopleLimitInput);
             this.Controls.Add(this.conditionDescriptionLabel);
             this.Controls.Add(this.selectableOptionsComboBox);
             this.Controls.Add(this.conditionCommonControl);
+            this.Font = new System.Drawing.Font("Malgun Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
+            this.Margin = new System.Windows.Forms.Padding(3);
             this.Name = "uConditionOptionBuyOrder";
-            this.Size = new System.Drawing.Size(700, 30);
+            this.Size = new System.Drawing.Size(760, 30);
             ((System.ComponentModel.ISupportInitialize)(this.peopleLimitInput)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -116,7 +126,7 @@ namespace ExcelConditionPainter
         #endregion
 
         private ConditionCommonControl conditionCommonControl;
-        private GDombo_CustomControl.CheckBoxComboBox selectableOptionsComboBox;
+        private WinFormsCustomControls.CheckBoxComboBox selectableOptionsComboBox;
         private System.Windows.Forms.Label conditionDescriptionLabel;
         private System.Windows.Forms.Label peopleLimitLabel;
         private System.Windows.Forms.NumericUpDown peopleLimitInput;

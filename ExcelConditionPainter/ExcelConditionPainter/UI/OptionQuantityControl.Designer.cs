@@ -36,7 +36,8 @@ namespace ExcelConditionPainter
             // optionNameLabel
             // 
             this.optionNameLabel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
-            this.optionNameLabel.Font = new System.Drawing.Font("돋움", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
+            this.optionNameLabel.Font = new System.Drawing.Font("Malgun Gothic", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
+            this.optionNameLabel.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(55)))), ((int)(((byte)(65)))), ((int)(((byte)(81)))));
             this.optionNameLabel.Location = new System.Drawing.Point(0, 1);
             this.optionNameLabel.Name = "optionNameLabel";
             this.optionNameLabel.Size = new System.Drawing.Size(249, 22);
@@ -47,15 +48,17 @@ namespace ExcelConditionPainter
             // optionCountInput
             // 
             this.optionCountInput.Dock = System.Windows.Forms.DockStyle.Right;
-            this.optionCountInput.Font = new System.Drawing.Font("돋움", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
+            this.optionCountInput.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.optionCountInput.Font = new System.Drawing.Font("Malgun Gothic", 10.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
             this.optionCountInput.Location = new System.Drawing.Point(249, 0);
+            this.optionCountInput.Margin = new System.Windows.Forms.Padding(3);
             this.optionCountInput.Maximum = new decimal(new int[] {
             10000,
             0,
             0,
             0});
             this.optionCountInput.Name = "optionCountInput";
-            this.optionCountInput.Size = new System.Drawing.Size(51, 25);
+            this.optionCountInput.Size = new System.Drawing.Size(51, 26);
             this.optionCountInput.TabIndex = 1;
             this.optionCountInput.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             this.optionCountInput.Value = new decimal(new int[] {
@@ -69,9 +72,10 @@ namespace ExcelConditionPainter
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoSize = true;
+            this.BackColor = System.Drawing.Color.White;
             this.Controls.Add(this.optionNameLabel);
             this.Controls.Add(this.optionCountInput);
-            this.Font = new System.Drawing.Font("돋움", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
+            this.Font = new System.Drawing.Font("Malgun Gothic", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
             this.Margin = new System.Windows.Forms.Padding(0);
             this.Name = "OptionQuantityControl";
             this.Size = new System.Drawing.Size(300, 25);

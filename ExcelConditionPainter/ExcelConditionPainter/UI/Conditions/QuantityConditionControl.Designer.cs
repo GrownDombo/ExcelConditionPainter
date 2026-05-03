@@ -28,7 +28,7 @@ namespace ExcelConditionPainter
         /// </summary>
         private void InitializeComponent()
         {
-            this.selectableColumnsComboBox = new GDombo_CustomControl.CheckBoxComboBox();
+            this.selectableColumnsComboBox = new WinFormsCustomControls.CheckBoxComboBox();
             this.selectedColumnsLabel = new System.Windows.Forms.Label();
             this.goodsCountInput = new System.Windows.Forms.NumericUpDown();
             this.goodsCountLabel = new System.Windows.Forms.Label();
@@ -44,53 +44,62 @@ namespace ExcelConditionPainter
             this.selectableColumnsComboBox.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
             this.selectableColumnsComboBox.DropDownHeight = 1;
             this.selectableColumnsComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.selectableColumnsComboBox.Font = new System.Drawing.Font("Malgun Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
             this.selectableColumnsComboBox.FormattingEnabled = true;
             this.selectableColumnsComboBox.IntegralHeight = false;
             this.selectableColumnsComboBox.Location = new System.Drawing.Point(3, 5);
             this.selectableColumnsComboBox.Name = "selectableColumnsComboBox";
-            this.selectableColumnsComboBox.Size = new System.Drawing.Size(90, 22);
+            this.selectableColumnsComboBox.Size = new System.Drawing.Size(90, 24);
             this.selectableColumnsComboBox.TabIndex = 5;
             // 
             // selectedColumnsLabel
             // 
             this.selectedColumnsLabel.AutoSize = true;
-            this.selectedColumnsLabel.Location = new System.Drawing.Point(96, 10);
+            this.selectedColumnsLabel.Font = new System.Drawing.Font("Malgun Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
+            this.selectedColumnsLabel.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(55)))), ((int)(((byte)(65)))), ((int)(((byte)(81)))));
+            this.selectedColumnsLabel.Location = new System.Drawing.Point(96, 8);
             this.selectedColumnsLabel.Name = "selectedColumnsLabel";
-            this.selectedColumnsLabel.Size = new System.Drawing.Size(101, 12);
+            this.selectedColumnsLabel.Size = new System.Drawing.Size(113, 15);
             this.selectedColumnsLabel.TabIndex = 6;
             this.selectedColumnsLabel.Text = "이 같은 사람들 중";
             // 
             // goodsCountInput
             // 
-            this.goodsCountInput.Location = new System.Drawing.Point(201, 6);
+            this.goodsCountInput.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.goodsCountInput.Font = new System.Drawing.Font("Malgun Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
+            this.goodsCountInput.Location = new System.Drawing.Point(214, 4);
             this.goodsCountInput.Maximum = new decimal(new int[] {
             1000000,
             0,
             0,
             0});
             this.goodsCountInput.Name = "goodsCountInput";
-            this.goodsCountInput.Size = new System.Drawing.Size(55, 21);
+            this.goodsCountInput.Size = new System.Drawing.Size(55, 23);
             this.goodsCountInput.TabIndex = 7;
             // 
             // goodsCountLabel
             // 
             this.goodsCountLabel.AutoSize = true;
-            this.goodsCountLabel.Location = new System.Drawing.Point(257, 10);
+            this.goodsCountLabel.Font = new System.Drawing.Font("Malgun Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
+            this.goodsCountLabel.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(55)))), ((int)(((byte)(65)))), ((int)(((byte)(81)))));
+            this.goodsCountLabel.Location = new System.Drawing.Point(274, 8);
             this.goodsCountLabel.Name = "goodsCountLabel";
-            this.goodsCountLabel.Size = new System.Drawing.Size(125, 12);
+            this.goodsCountLabel.Size = new System.Drawing.Size(140, 15);
             this.goodsCountLabel.TabIndex = 8;
             this.goodsCountLabel.Text = "개 이상 구매자 선착순";
             // 
             // peopleLimitInput
             // 
-            this.peopleLimitInput.Location = new System.Drawing.Point(383, 6);
+            this.peopleLimitInput.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.peopleLimitInput.Font = new System.Drawing.Font("Malgun Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
+            this.peopleLimitInput.Location = new System.Drawing.Point(416, 4);
             this.peopleLimitInput.Minimum = new decimal(new int[] {
             1,
             0,
             0,
             0});
             this.peopleLimitInput.Name = "peopleLimitInput";
-            this.peopleLimitInput.Size = new System.Drawing.Size(55, 21);
+            this.peopleLimitInput.Size = new System.Drawing.Size(55, 23);
             this.peopleLimitInput.TabIndex = 9;
             this.peopleLimitInput.Value = new decimal(new int[] {
             10,
@@ -102,9 +111,9 @@ namespace ExcelConditionPainter
             // 
             this.conditionCommonControl.PaintTarget = ExcelConditionPainter.PaintTarget.Font;
             this.conditionCommonControl.Dock = System.Windows.Forms.DockStyle.Right;
-            this.conditionCommonControl.Font = new System.Drawing.Font("돋움", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
+            this.conditionCommonControl.Font = new System.Drawing.Font("Malgun Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
             this.conditionCommonControl.PriorityLevel = 0;
-            this.conditionCommonControl.Location = new System.Drawing.Point(485, 0);
+            this.conditionCommonControl.Location = new System.Drawing.Point(545, 0);
             this.conditionCommonControl.Name = "ConditionCommon";
             this.conditionCommonControl.SelectedColor = System.Drawing.Color.Red;
             this.conditionCommonControl.Size = new System.Drawing.Size(215, 30);
@@ -114,9 +123,11 @@ namespace ExcelConditionPainter
             // peopleLimitLabel
             // 
             this.peopleLimitLabel.AutoSize = true;
-            this.peopleLimitLabel.Location = new System.Drawing.Point(441, 10);
+            this.peopleLimitLabel.Font = new System.Drawing.Font("Malgun Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
+            this.peopleLimitLabel.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(55)))), ((int)(((byte)(65)))), ((int)(((byte)(81)))));
+            this.peopleLimitLabel.Location = new System.Drawing.Point(475, 8);
             this.peopleLimitLabel.Name = "peopleLimitLabel";
-            this.peopleLimitLabel.Size = new System.Drawing.Size(17, 12);
+            this.peopleLimitLabel.Size = new System.Drawing.Size(20, 15);
             this.peopleLimitLabel.TabIndex = 10;
             this.peopleLimitLabel.Text = "명";
             // 
@@ -124,6 +135,7 @@ namespace ExcelConditionPainter
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.BackColor = System.Drawing.Color.White;
             this.Controls.Add(this.peopleLimitLabel);
             this.Controls.Add(this.peopleLimitInput);
             this.Controls.Add(this.goodsCountLabel);
@@ -131,9 +143,10 @@ namespace ExcelConditionPainter
             this.Controls.Add(this.selectedColumnsLabel);
             this.Controls.Add(this.selectableColumnsComboBox);
             this.Controls.Add(this.conditionCommonControl);
-            this.Font = new System.Drawing.Font("돋움", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
+            this.Font = new System.Drawing.Font("Malgun Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
+            this.Margin = new System.Windows.Forms.Padding(3);
             this.Name = "uConditionCount";
-            this.Size = new System.Drawing.Size(700, 30);
+            this.Size = new System.Drawing.Size(760, 30);
             ((System.ComponentModel.ISupportInitialize)(this.goodsCountInput)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.peopleLimitInput)).EndInit();
             this.ResumeLayout(false);
@@ -143,7 +156,7 @@ namespace ExcelConditionPainter
 
         #endregion
         private ConditionCommonControl conditionCommonControl;
-        private GDombo_CustomControl.CheckBoxComboBox selectableColumnsComboBox;
+        private WinFormsCustomControls.CheckBoxComboBox selectableColumnsComboBox;
         private System.Windows.Forms.Label selectedColumnsLabel;
         private System.Windows.Forms.NumericUpDown goodsCountInput;
         private System.Windows.Forms.Label goodsCountLabel;
