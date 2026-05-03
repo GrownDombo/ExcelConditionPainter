@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -14,11 +14,11 @@ namespace ExcelConditionPainter
     public partial class FormSetConditions : Form
     {
         private readonly DataGridView dataGridView;
-        private readonly string[] arrCols;
-        private readonly int nRowCnt;
-        private string[] arrOptions;
+        private readonly string[] columnNames;
+        private readonly int rowCount;
+        private string[] optionNames;
 
-        public cConditionCalculator conditionCalculator { get; private set; }
+        public ConditionEvaluationContext ConditionContext { get; private set; }
 
         public FormSetConditions(DataGridView dataGridView)
         {
@@ -27,28 +27,28 @@ namespace ExcelConditionPainter
             this.dataGridView = dataGridView;
             /////////////////////////////////////////////////////
 
-            conditionCalculator = null;
+            ConditionContext = null;
             DataTable dataTable = dataGridView.DataSource as DataTable;
-            List<string> lPrimaryCandidates = new List<string>();
+            List<string> primaryKeyCandidates = new List<string>();
 
-            int colIdx = 0;
-            int dateColIdx = -1; // 날짜 형식의 Col을 찾음
-            int nameIdx = -1;  // 이름 형식의 Col을 찾음
-            int optionColIdx = -1; // 상품옵션 컬럼을 찾음
-            int cntColIdx = -1; // 상품수량 컬럼을 찾음
+            int columnIndex = 0;
+            int dateColumnIndex = -1; // 날짜 형식의 Col을 찾음
+            int nameColumnIndex = -1;  // 이름 형식의 Col을 찾음
+            int optionColumnIndex = -1; // 상품옵션 컬럼을 찾음
+            int countColumnIndex = -1; // 상품수량 컬럼을 찾음
 
-            arrCols = new string[dataTable.Columns.Count];
-            nRowCnt = dataTable.Rows.Count;
+            columnNames = new string[dataTable.Columns.Count];
+            rowCount = dataTable.Rows.Count;
             foreach (DataColumn column in dataTable.Columns)
             {
-                string sColumnName = arrCols[colIdx++] = column.ColumnName;
-                cbxOrderBy.Items.Add(sColumnName);
-                cbxOrderBy2.Items.Add(sColumnName);
-                cbxGoodsOptionCol.Items.Add(sColumnName);
-                cbxBuyCntCol.Items.Add(sColumnName);
+                string columnName = columnNames[columnIndex++] = column.ColumnName;
+                primarySortColumnComboBox.Items.Add(columnName);
+                secondarySortColumnComboBox.Items.Add(columnName);
+                goodsOptionColumnComboBox.Items.Add(columnName);
+                buyCountColumnComboBox.Items.Add(columnName);
                 HashSet<string> uniqueValues = new HashSet<string>();
                 bool hasNull = false;
-                bool DateCol = true;
+                bool isDateColumn = true;
 
                 foreach (DataRow row in dataTable.Rows)
                 {
@@ -56,84 +56,84 @@ namespace ExcelConditionPainter
                     if (string.IsNullOrEmpty(value))
                     {
                         hasNull = true;
-                        DateCol = false; // Null 이어도 찾은 컬럼은아님
+                        isDateColumn = false; // Null 이어도 찾은 컬럼은아님
                         break;
                     }
                     uniqueValues.Add(value);
                     if (!DateTime.TryParse(value, out _))
                     {
-                        DateCol = false;
+                        isDateColumn = false;
                     }
                 }
                 if (!hasNull && uniqueValues.Count == dataTable.Rows.Count)
                 {
-                    lPrimaryCandidates.Add(sColumnName);
+                    primaryKeyCandidates.Add(columnName);
                 }
-                if (optionColIdx == -1 && sColumnName.Contains("옵션"))
+                if (optionColumnIndex == -1 && columnName.Contains("옵션"))
                 {
-                    optionColIdx = colIdx - 1;
+                    optionColumnIndex = columnIndex - 1;
                 }
-                else if (cntColIdx == -1 && sColumnName.Contains("수량"))
+                else if (countColumnIndex == -1 && columnName.Contains("수량"))
                 {
-                    cntColIdx = colIdx - 1;
+                    countColumnIndex = columnIndex - 1;
                 }
-                else if (dateColIdx == -1 && DateCol)
+                else if (dateColumnIndex == -1 && isDateColumn)
                 {
-                    dateColIdx = colIdx - 1;
+                    dateColumnIndex = columnIndex - 1;
                 }
-                else if (nameIdx == -1 && sColumnName.Contains("주문자"))
+                else if (nameColumnIndex == -1 && columnName.Contains("주문자"))
                 {
-                    nameIdx = colIdx - 1;
+                    nameColumnIndex = columnIndex - 1;
                 }
             }
-            int nLength = lPrimaryCandidates.Count();
-            if (nLength <= 0)
+            int candidateCount = primaryKeyCandidates.Count();
+            if (candidateCount <= 0)
             {
                 MessageBox.Show("데이터 잘못됨 엑셀 파일 확인 필요함 - 기본키 잘못됨");
                 this.DialogResult = DialogResult.Abort;
                 return;
             }
 
-            for (int i = 0; i < nLength; i++)
-                cbxPrimaryKey.Items.Add(lPrimaryCandidates[i]);
+            for (int i = 0; i < candidateCount; i++)
+                primaryKeyComboBox.Items.Add(primaryKeyCandidates[i]);
 
-            cbxPrimaryKey.SelectedIndex = 0;
-            cbxOrderBy.SelectedIndex = dateColIdx < 0 ? 0 : dateColIdx;
-            cbxOrderBy2.SelectedIndex = nameIdx < 0 ? 0 : nameIdx;
-            cbxGoodsOptionCol.SelectedIndex = optionColIdx < 0 ? 0 : optionColIdx;
-            cbxBuyCntCol.SelectedIndex = cntColIdx < 0 ? 0 : cntColIdx;
+            primaryKeyComboBox.SelectedIndex = 0;
+            primarySortColumnComboBox.SelectedIndex = dateColumnIndex < 0 ? 0 : dateColumnIndex;
+            secondarySortColumnComboBox.SelectedIndex = nameColumnIndex < 0 ? 0 : nameColumnIndex;
+            goodsOptionColumnComboBox.SelectedIndex = optionColumnIndex < 0 ? 0 : optionColumnIndex;
+            buyCountColumnComboBox.SelectedIndex = countColumnIndex < 0 ? 0 : countColumnIndex;
 
-            foreach (eConditions cond in Enum.GetValues(typeof(eConditions)))
+            foreach (ConditionRuleType cond in Enum.GetValues(typeof(ConditionRuleType)))
             {
-                cbxAddCondition.Items.Add(cond.GetDescription());
+                addConditionComboBox.Items.Add(cond.GetDescription());
             }
-            cbxAddCondition.SelectedIndex = 0;
+            addConditionComboBox.SelectedIndex = 0;
 
             // 이부분 인터페이스로 뺄수 있면 빼자
-            foreach (Control control in vflpCondition.Controls)
+            foreach (Control control in conditionFlowPanel.Controls)
             {
-                if (control is ICondtions condtion)
+                if (control is IConditionRule conditionRule)
                 {
-                    string[] arrDatas;
-                    if (condtion is ucConditionOrderBySpecialOption)
-                        arrDatas = arrOptions;
+                    string[] selectableItems;
+                    if (conditionRule is OptionPurchaseOrderConditionControl)
+                        selectableItems = optionNames;
                     else
-                        arrDatas = arrCols;
-                    condtion.SetOptionRange(arrDatas, nRowCnt);
+                        selectableItems = columnNames;
+                    conditionRule.SetSelectableItems(selectableItems, rowCount);
                 }
             }
         }
-        private void cbxSelectOption_SelectedIndexChanged(object sender, EventArgs e)
+        private void goodsOptionColumnComboBox_SelectedIndexChanged(object sender, EventArgs e)
         {
             try
             {
                 DataTable dataTable = dataGridView.DataSource as DataTable;
-                vflpOptionCnt.SuspendLayout();
-                vflpOptionCnt.Controls.Clear();
+                optionQuantityFlowPanel.SuspendLayout();
+                optionQuantityFlowPanel.Controls.Clear();
 
                 HashSet<string> uniqueValues = new HashSet<string>();
-                string selectedColumn = cbxGoodsOptionCol.SelectedItem.ToString();
-                List<ucSetOptionCount> lucSetOptionCnts = new List<ucSetOptionCount>();
+                string selectedColumn = goodsOptionColumnComboBox.SelectedItem.ToString();
+                List<OptionQuantityControl> optionQuantityControls = new List<OptionQuantityControl>();
                 foreach (DataRow row in dataTable.Rows)
                 {
                     string value = row[selectedColumn].ToString();
@@ -141,10 +141,10 @@ namespace ExcelConditionPainter
                         uniqueValues.Contains(value))
                         continue;
                     uniqueValues.Add(value);
-                    lucSetOptionCnts.Add(new ucSetOptionCount() { OptionName = value });
+                    optionQuantityControls.Add(new OptionQuantityControl() { OptionName = value });
                 }
-                arrOptions = uniqueValues.ToArray();
-                vflpOptionCnt.Controls.AddRange(lucSetOptionCnts.ToArray());
+                optionNames = uniqueValues.ToArray();
+                optionQuantityFlowPanel.Controls.AddRange(optionQuantityControls.ToArray());
             }
             catch (Exception ex)
             {
@@ -152,82 +152,82 @@ namespace ExcelConditionPainter
             }
             finally
             {
-                vflpOptionCnt.ResumeLayout();
+                optionQuantityFlowPanel.ResumeLayout();
             }
         }
-        private void btnAddCondtion_Click(object sender, EventArgs e)
+        private void addConditionButton_Click(object sender, EventArgs e)
         {
-            vflpCondition.SuspendLayout(); // 레이아웃 일시 중지
+            conditionFlowPanel.SuspendLayout(); // 레이아웃 일시 중지
             try
             {
-                int maxLevel = vflpCondition.Controls.OfType<ICondtions>().Max(c => c.Level) + 1;
-                ICondtions condtions;
-                switch (cbxAddCondition.SelectedIndex)
+                int maxPriorityLevel = conditionFlowPanel.Controls.OfType<IConditionRule>().Max(c => c.PriorityLevel) + 1;
+                IConditionRule conditionRule;
+                switch (addConditionComboBox.SelectedIndex)
                 {
-                    case (int)eConditions.Order:
-                        condtions = new ucConditionOrderExceptDuplication(arrCols, nRowCnt);
+                    case (int)ConditionRuleType.Order:
+                        conditionRule = new DistinctOrderConditionControl(columnNames, rowCount);
                         break;
-                    case (int)eConditions.Duplicate:
-                        condtions = new ucConditionDuplicate(arrCols, nRowCnt);
+                    case (int)ConditionRuleType.Duplicate:
+                        conditionRule = new DuplicateConditionControl(columnNames, rowCount);
                         break;
-                    case (int)eConditions.Quantity:
-                        condtions = new ucConditionQuantity(arrCols, nRowCnt);
+                    case (int)ConditionRuleType.Quantity:
+                        conditionRule = new QuantityConditionControl(columnNames, rowCount);
                         break;
-                    case (int)eConditions.OptionBuyOrder:
-                        condtions = new ucConditionOrderBySpecialOption(arrOptions, nRowCnt);
+                    case (int)ConditionRuleType.OptionBuyOrder:
+                        conditionRule = new OptionPurchaseOrderConditionControl(optionNames, rowCount);
                         break;
                     default:
                         return;
                 }
-                condtions.Level = maxLevel;
-                vflpCondition.Controls.Add(condtions as Control);
+                conditionRule.PriorityLevel = maxPriorityLevel;
+                conditionFlowPanel.Controls.Add(conditionRule as Control);
             }
             finally
             {
-                vflpCondition.ResumeLayout(false); // 레이아웃 다시 시작
-                vflpCondition.PerformLayout(); // 레이아웃 강제 업데이트서 
+                conditionFlowPanel.ResumeLayout(false); // 레이아웃 다시 시작
+                conditionFlowPanel.PerformLayout(); // 레이아웃 강제 업데이트서 
             }
         }
-        private void btnSet_Click(object sender, EventArgs e)
+        private void setButton_Click(object sender, EventArgs e)
         {
             try
             {
                 // 1. 정렬 설정 
-                string sOrderBy = cbxOrderBy.SelectedItem.ToString();
-                string sOrderBy2 = cbxOrderBy2.SelectedItem.ToString();
+                string primarySortColumnName = primarySortColumnComboBox.SelectedItem.ToString();
+                string secondarySortColumnName = secondarySortColumnComboBox.SelectedItem.ToString();
                 DataTable dataTable = dataGridView.DataSource as DataTable;
-                dataTable.DefaultView.Sort = $"{sOrderBy} ASC, {sOrderBy2} ASC"; // ASC 또는 DESC
+                dataTable.DefaultView.Sort = $"{primarySortColumnName} ASC, {secondarySortColumnName} ASC"; // ASC 또는 DESC
                 dataTable = dataTable.DefaultView.ToTable();
 
                 // 2. 기본키 설정
-                string sPrimaryKey = cbxPrimaryKey.SelectedItem.ToString();
-                DataColumn dcPrimaryKey = dataTable.Columns[sPrimaryKey];
-                dataTable.PrimaryKey = new DataColumn[] { dcPrimaryKey };
+                string primaryKey = primaryKeyComboBox.SelectedItem.ToString();
+                DataColumn primaryKeyColumn = dataTable.Columns[primaryKey];
+                dataTable.PrimaryKey = new DataColumn[] { primaryKeyColumn };
                 
                 // 3. 상품옵션 설정
-                string sBuyCntColName = cbxBuyCntCol.SelectedItem.ToString();
-                string sOptionColName = cbxGoodsOptionCol.SelectedItem.ToString();
-                Dictionary<string, int> dicGoodsQuntity = new Dictionary<string, int>();
-                foreach (Control control in vflpOptionCnt.Controls)
+                string buyCountColumnName = buyCountColumnComboBox.SelectedItem.ToString();
+                string optionColumnName = goodsOptionColumnComboBox.SelectedItem.ToString();
+                Dictionary<string, int> goodsQuantitiesByOption = new Dictionary<string, int>();
+                foreach (Control control in optionQuantityFlowPanel.Controls)
                 {
-                    if (control is ucSetOptionCount setOptionCnt)
+                    if (control is OptionQuantityControl optionQuantityControl)
                     {
-                        if (string.IsNullOrEmpty(setOptionCnt.OptionName))
+                        if (string.IsNullOrEmpty(optionQuantityControl.OptionName))
                             continue;
-                        dicGoodsQuntity.Add(setOptionCnt.OptionName, setOptionCnt.OptionCount);
+                        goodsQuantitiesByOption.Add(optionQuantityControl.OptionName, optionQuantityControl.OptionCount);
                     }
                 }
 
                 // 5. 조건 계산
-                int nAppliedConditionIndex = 0;
-                conditionCalculator = new cConditionCalculator(sPrimaryKey, sBuyCntColName, sOptionColName, dicGoodsQuntity, dataTable);
-                ILookup<int, ICondtions> lookups = vflpCondition.Controls.OfType<ICondtions>().ToLookup(c => c.Level); // Level 이 낮은 값부터 
-                foreach (IGrouping<int, ICondtions> group in lookups)
+                int appliedConditionIndex = 0;
+                ConditionContext = new ConditionEvaluationContext(primaryKey, buyCountColumnName, optionColumnName, goodsQuantitiesByOption, dataTable);
+                ILookup<int, IConditionRule> lookups = conditionFlowPanel.Controls.OfType<IConditionRule>().ToLookup(c => c.PriorityLevel); // PriorityLevel 이 낮은 값부터 
+                foreach (IGrouping<int, IConditionRule> group in lookups)
                 {
-                    foreach (ICondtions condtions in group)
+                    foreach (IConditionRule conditionRule in group)
                     {
-                        if (condtions.CondtionResult(conditionCalculator))
-                            condtions.nAppliedConditionIndex = ++nAppliedConditionIndex;
+                        if (conditionRule.Evaluate(ConditionContext))
+                            conditionRule.AppliedConditionIndex = ++appliedConditionIndex;
                     }
                 }
                 this.Close();

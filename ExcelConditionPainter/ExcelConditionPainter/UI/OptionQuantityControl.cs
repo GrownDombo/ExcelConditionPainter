@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -11,7 +11,7 @@ using System.Windows.Forms;
 
 namespace ExcelConditionPainter
 {
-    public partial class ucSetOptionCount : UserControl
+    public partial class OptionQuantityControl : UserControl
     {
         [Browsable(true)]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Visible)]
@@ -19,19 +19,19 @@ namespace ExcelConditionPainter
         [Category("Custom")]
         public string OptionName
         {
-            get { return lbOptionName.Text; }
+            get { return optionNameLabel.Text; }
             set
             {
-                lbOptionName.Text = value;
-                // 숫자 추출 및 numOptionCnt에 적용
+                optionNameLabel.Text = value;
+                // 숫자 추출 및 optionCountInput에 적용
                 if (!string.IsNullOrEmpty(value))
                 {
                     // 정규식을 사용하여 숫자 추출
                     Match match = Regex.Match(value, @"\d+");
                     if (match.Success && int.TryParse(match.Value, out int extractedNumber))
                     {
-                        // 추출된 숫자를 numOptionCnt에 설정
-                        numOptionCnt.Value = Math.Min(numOptionCnt.Maximum, extractedNumber);
+                        // 추출된 숫자를 optionCountInput에 설정
+                        optionCountInput.Value = Math.Min(optionCountInput.Maximum, extractedNumber);
                     }
                 }
             }
@@ -42,10 +42,10 @@ namespace ExcelConditionPainter
         [Category("Custom")]
         public int OptionCount
         {
-            get { return (int)numOptionCnt.Value; }
-            set { numOptionCnt.Value = value; }
+            get { return (int)optionCountInput.Value; }
+            set { optionCountInput.Value = value; }
         }
-        public ucSetOptionCount()
+        public OptionQuantityControl()
         {
             InitializeComponent();
         }

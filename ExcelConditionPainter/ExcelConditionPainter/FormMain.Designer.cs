@@ -1,4 +1,4 @@
-﻿namespace ExcelConditionPainter
+namespace ExcelConditionPainter
 {
     partial class FormMain
     {
@@ -28,116 +28,116 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.msMain = new System.Windows.Forms.MenuStrip();
-            this.openToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.pnViewer = new System.Windows.Forms.Panel();
-            this.dgvMain = new GDombo_CustomControl.DoubleBufferedDataGridView();
-            this.lbViewer = new System.Windows.Forms.Label();
-            this.btnExport = new System.Windows.Forms.Button();
-            this.optionsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.msMain.SuspendLayout();
-            this.pnViewer.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.dgvMain)).BeginInit();
+            this.mainMenuStrip = new System.Windows.Forms.MenuStrip();
+            this.openMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.helpMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.viewerPanel = new System.Windows.Forms.Panel();
+            this.mainGridView = new GDombo_CustomControl.DoubleBufferedDataGridView();
+            this.viewerLabel = new System.Windows.Forms.Label();
+            this.exportButton = new System.Windows.Forms.Button();
+            this.optionsMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.mainMenuStrip.SuspendLayout();
+            this.viewerPanel.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.mainGridView)).BeginInit();
             this.SuspendLayout();
             // 
-            // msMain
+            // mainMenuStrip
             // 
-            this.msMain.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.openToolStripMenuItem,
-            this.helpToolStripMenuItem,
-            this.optionsToolStripMenuItem});
-            this.msMain.Location = new System.Drawing.Point(0, 0);
-            this.msMain.Name = "msMain";
-            this.msMain.Size = new System.Drawing.Size(1984, 24);
-            this.msMain.TabIndex = 0;
-            this.msMain.Text = "menuStrip1";
+            this.mainMenuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.openMenuItem,
+            this.helpMenuItem,
+            this.optionsMenuItem});
+            this.mainMenuStrip.Location = new System.Drawing.Point(0, 0);
+            this.mainMenuStrip.Name = "mainMenuStrip";
+            this.mainMenuStrip.Size = new System.Drawing.Size(1984, 24);
+            this.mainMenuStrip.TabIndex = 0;
+            this.mainMenuStrip.Text = "menuStrip1";
             // 
-            // openToolStripMenuItem
+            // openMenuItem
             // 
-            this.openToolStripMenuItem.Name = "openToolStripMenuItem";
-            this.openToolStripMenuItem.Size = new System.Drawing.Size(48, 20);
-            this.openToolStripMenuItem.Text = "Open";
-            this.openToolStripMenuItem.Click += new System.EventHandler(this.openToolStripMenuItem_Click);
+            this.openMenuItem.Name = "openMenuItem";
+            this.openMenuItem.Size = new System.Drawing.Size(48, 20);
+            this.openMenuItem.Text = "Open";
+            this.openMenuItem.Click += new System.EventHandler(this.openMenuItem_Click);
             // 
-            // helpToolStripMenuItem
+            // helpMenuItem
             // 
-            this.helpToolStripMenuItem.Name = "helpToolStripMenuItem";
-            this.helpToolStripMenuItem.Size = new System.Drawing.Size(44, 20);
-            this.helpToolStripMenuItem.Text = "Help";
-            this.helpToolStripMenuItem.Click += new System.EventHandler(this.helpToolStripMenuItem_Click);
+            this.helpMenuItem.Name = "helpMenuItem";
+            this.helpMenuItem.Size = new System.Drawing.Size(44, 20);
+            this.helpMenuItem.Text = "Help";
+            this.helpMenuItem.Click += new System.EventHandler(this.helpMenuItem_Click);
             // 
-            // pnViewer
+            // viewerPanel
             // 
-            this.pnViewer.Controls.Add(this.dgvMain);
-            this.pnViewer.Controls.Add(this.lbViewer);
-            this.pnViewer.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.pnViewer.Location = new System.Drawing.Point(0, 24);
-            this.pnViewer.Name = "pnViewer";
-            this.pnViewer.Size = new System.Drawing.Size(1984, 1173);
-            this.pnViewer.TabIndex = 8;
+            this.viewerPanel.Controls.Add(this.mainGridView);
+            this.viewerPanel.Controls.Add(this.viewerLabel);
+            this.viewerPanel.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.viewerPanel.Location = new System.Drawing.Point(0, 24);
+            this.viewerPanel.Name = "viewerPanel";
+            this.viewerPanel.Size = new System.Drawing.Size(1984, 1173);
+            this.viewerPanel.TabIndex = 8;
             // 
-            // dgvMain
+            // mainGridView
             // 
-            this.dgvMain.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.AllCells;
-            this.dgvMain.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dgvMain.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.dgvMain.Location = new System.Drawing.Point(0, 20);
-            this.dgvMain.Name = "dgvMain";
-            this.dgvMain.ReadOnly = true;
-            this.dgvMain.RowTemplate.Height = 23;
-            this.dgvMain.Size = new System.Drawing.Size(1984, 1153);
-            this.dgvMain.TabIndex = 7;
-            this.dgvMain.DataBindingComplete += new System.Windows.Forms.DataGridViewBindingCompleteEventHandler(this.dgvMain_DataBindingComplete);
-            this.dgvMain.RowPostPaint += new System.Windows.Forms.DataGridViewRowPostPaintEventHandler(this.dgvMain_RowPostPaint);
+            this.mainGridView.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.AllCells;
+            this.mainGridView.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.mainGridView.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.mainGridView.Location = new System.Drawing.Point(0, 20);
+            this.mainGridView.Name = "mainGridView";
+            this.mainGridView.ReadOnly = true;
+            this.mainGridView.RowTemplate.Height = 23;
+            this.mainGridView.Size = new System.Drawing.Size(1984, 1153);
+            this.mainGridView.TabIndex = 7;
+            this.mainGridView.DataBindingComplete += new System.Windows.Forms.DataGridViewBindingCompleteEventHandler(this.mainGridView_DataBindingComplete);
+            this.mainGridView.RowPostPaint += new System.Windows.Forms.DataGridViewRowPostPaintEventHandler(this.mainGridView_RowPostPaint);
             // 
-            // lbViewer
+            // viewerLabel
             // 
-            this.lbViewer.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(26)))), ((int)(((byte)(72)))));
-            this.lbViewer.Dock = System.Windows.Forms.DockStyle.Top;
-            this.lbViewer.Font = new System.Drawing.Font("돋움", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
-            this.lbViewer.ForeColor = System.Drawing.Color.White;
-            this.lbViewer.Location = new System.Drawing.Point(0, 0);
-            this.lbViewer.Name = "lbViewer";
-            this.lbViewer.Size = new System.Drawing.Size(1984, 20);
-            this.lbViewer.TabIndex = 6;
-            this.lbViewer.Text = " ▶ Viewer";
-            this.lbViewer.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.viewerLabel.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(26)))), ((int)(((byte)(72)))));
+            this.viewerLabel.Dock = System.Windows.Forms.DockStyle.Top;
+            this.viewerLabel.Font = new System.Drawing.Font("돋움", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
+            this.viewerLabel.ForeColor = System.Drawing.Color.White;
+            this.viewerLabel.Location = new System.Drawing.Point(0, 0);
+            this.viewerLabel.Name = "viewerLabel";
+            this.viewerLabel.Size = new System.Drawing.Size(1984, 20);
+            this.viewerLabel.TabIndex = 6;
+            this.viewerLabel.Text = " ▶ Viewer";
+            this.viewerLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
-            // btnExport
+            // exportButton
             // 
-            this.btnExport.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.btnExport.Location = new System.Drawing.Point(0, 1197);
-            this.btnExport.Name = "btnExport";
-            this.btnExport.Size = new System.Drawing.Size(1984, 64);
-            this.btnExport.TabIndex = 9;
-            this.btnExport.Text = "Export";
-            this.btnExport.UseVisualStyleBackColor = true;
-            this.btnExport.Click += new System.EventHandler(this.btnExport_Click);
+            this.exportButton.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.exportButton.Location = new System.Drawing.Point(0, 1197);
+            this.exportButton.Name = "exportButton";
+            this.exportButton.Size = new System.Drawing.Size(1984, 64);
+            this.exportButton.TabIndex = 9;
+            this.exportButton.Text = "Export";
+            this.exportButton.UseVisualStyleBackColor = true;
+            this.exportButton.Click += new System.EventHandler(this.exportButton_Click);
             // 
-            // optionsToolStripMenuItem
+            // optionsMenuItem
             // 
-            this.optionsToolStripMenuItem.Name = "optionsToolStripMenuItem";
-            this.optionsToolStripMenuItem.Size = new System.Drawing.Size(61, 20);
-            this.optionsToolStripMenuItem.Text = "Options";
-            this.optionsToolStripMenuItem.Click += new System.EventHandler(this.optionsToolStripMenuItem_Click);
+            this.optionsMenuItem.Name = "optionsMenuItem";
+            this.optionsMenuItem.Size = new System.Drawing.Size(61, 20);
+            this.optionsMenuItem.Text = "Options";
+            this.optionsMenuItem.Click += new System.EventHandler(this.optionsMenuItem_Click);
             // 
             // FormMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1984, 1261);
-            this.Controls.Add(this.pnViewer);
-            this.Controls.Add(this.msMain);
-            this.Controls.Add(this.btnExport);
-            this.MainMenuStrip = this.msMain;
+            this.Controls.Add(this.viewerPanel);
+            this.Controls.Add(this.mainMenuStrip);
+            this.Controls.Add(this.exportButton);
+            this.MainMenuStrip = this.mainMenuStrip;
             this.Name = "FormMain";
             this.Text = "Condition Excel Painter";
             this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
-            this.msMain.ResumeLayout(false);
-            this.msMain.PerformLayout();
-            this.pnViewer.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.dgvMain)).EndInit();
+            this.mainMenuStrip.ResumeLayout(false);
+            this.mainMenuStrip.PerformLayout();
+            this.viewerPanel.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.mainGridView)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -145,14 +145,14 @@
 
         #endregion
 
-        private System.Windows.Forms.MenuStrip msMain;
-        private System.Windows.Forms.ToolStripMenuItem openToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem helpToolStripMenuItem;
-        private System.Windows.Forms.Panel pnViewer;
-        private GDombo_CustomControl.DoubleBufferedDataGridView dgvMain;
-        private System.Windows.Forms.Label lbViewer;
-        private System.Windows.Forms.Button btnExport;
-        private System.Windows.Forms.ToolStripMenuItem optionsToolStripMenuItem;
+        private System.Windows.Forms.MenuStrip mainMenuStrip;
+        private System.Windows.Forms.ToolStripMenuItem openMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem helpMenuItem;
+        private System.Windows.Forms.Panel viewerPanel;
+        private GDombo_CustomControl.DoubleBufferedDataGridView mainGridView;
+        private System.Windows.Forms.Label viewerLabel;
+        private System.Windows.Forms.Button exportButton;
+        private System.Windows.Forms.ToolStripMenuItem optionsMenuItem;
     }
 }
 

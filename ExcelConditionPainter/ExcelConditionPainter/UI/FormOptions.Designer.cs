@@ -1,4 +1,4 @@
-﻿namespace ExcelConditionPainter
+namespace ExcelConditionPainter
 {
     partial class FormOptions
     {
@@ -28,38 +28,38 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.cbExportSplitByConditions = new System.Windows.Forms.CheckBox();
-            this.btnSave = new System.Windows.Forms.Button();
+            this.exportSplitByConditionsCheckBox = new System.Windows.Forms.CheckBox();
+            this.saveButton = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
-            // cbExportSplitByConditions
+            // exportSplitByConditionsCheckBox
             // 
-            this.cbExportSplitByConditions.AutoSize = true;
-            this.cbExportSplitByConditions.Location = new System.Drawing.Point(5, 5);
-            this.cbExportSplitByConditions.Name = "cbExportSplitByConditions";
-            this.cbExportSplitByConditions.Size = new System.Drawing.Size(171, 16);
-            this.cbExportSplitByConditions.TabIndex = 0;
-            this.cbExportSplitByConditions.Text = "Export Split By Conditions";
-            this.cbExportSplitByConditions.UseVisualStyleBackColor = true;
+            this.exportSplitByConditionsCheckBox.AutoSize = true;
+            this.exportSplitByConditionsCheckBox.Location = new System.Drawing.Point(5, 5);
+            this.exportSplitByConditionsCheckBox.Name = "exportSplitByConditionsCheckBox";
+            this.exportSplitByConditionsCheckBox.Size = new System.Drawing.Size(171, 16);
+            this.exportSplitByConditionsCheckBox.TabIndex = 0;
+            this.exportSplitByConditionsCheckBox.Text = "Export Split By Conditions";
+            this.exportSplitByConditionsCheckBox.UseVisualStyleBackColor = true;
             // 
-            // btnSave
+            // saveButton
             // 
-            this.btnSave.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.btnSave.Location = new System.Drawing.Point(0, 54);
-            this.btnSave.Name = "btnSave";
-            this.btnSave.Size = new System.Drawing.Size(202, 23);
-            this.btnSave.TabIndex = 1;
-            this.btnSave.Text = "Save";
-            this.btnSave.UseVisualStyleBackColor = true;
-            this.btnSave.Click += new System.EventHandler(this.btnSave_Click);
+            this.saveButton.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.saveButton.Location = new System.Drawing.Point(0, 54);
+            this.saveButton.Name = "saveButton";
+            this.saveButton.Size = new System.Drawing.Size(202, 23);
+            this.saveButton.TabIndex = 1;
+            this.saveButton.Text = "Save";
+            this.saveButton.UseVisualStyleBackColor = true;
+            this.saveButton.Click += new System.EventHandler(this.saveButton_Click);
             // 
             // FormOptions
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(202, 77);
-            this.Controls.Add(this.btnSave);
-            this.Controls.Add(this.cbExportSplitByConditions);
+            this.Controls.Add(this.saveButton);
+            this.Controls.Add(this.exportSplitByConditionsCheckBox);
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "FormOptions";
@@ -72,7 +72,7 @@
 
         #endregion
 
-        private System.Windows.Forms.CheckBox cbExportSplitByConditions;
-        private System.Windows.Forms.Button btnSave;
+        private System.Windows.Forms.CheckBox exportSplitByConditionsCheckBox;
+        private System.Windows.Forms.Button saveButton;
     }
 }

@@ -1,4 +1,4 @@
-﻿using ClosedXML.Excel;
+using ClosedXML.Excel;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -11,28 +11,27 @@ namespace ExcelConditionPainter
 {
     public partial class FormMain : Form
     {
-        private const string FIRST_SHEET_NAME = "ExportedData";
-        private readonly FormSearch formSearch; // FormSearch를 필드로 선언
-        private readonly FormOptions formOptions;
+        private const string FirstSheetName = "ExportedData";
+        private readonly FormSearch searchForm; // FormSearch를 필드로 선언
+        private readonly FormOptions optionsForm;
 
-        private string sPath;
-        private cConditionCalculator conditionCalculator;
+        private string sourceFilePath;
+        private ConditionEvaluationContext conditionContext;
         public FormMain()
         {
             InitializeComponent();
-            formSearch = new FormSearch(dgvMain);
-            formSearch.Owner = this; // FormSearch의 소유자를 현재 폼으로 설정
-            formOptions = new FormOptions();
-            formOptions.Owner = this;
+            searchForm = new FormSearch(mainGridView);
+            searchForm.Owner = this; // FormSearch의 소유자를 현재 폼으로 설정
+            optionsForm = new FormOptions();
+            optionsForm.Owner = this;
 
-            sPath = string.Empty;
-            conditionCalculator = null;
+            sourceFilePath = string.Empty;
+            conditionContext = null;
         }
         private DataTable LoadFileToDataTable(string fileFullPath)
         {
             string tableName = Path.GetFileNameWithoutExtension(fileFullPath);
             DataTable table = new DataTable(tableName);
-            List<string> duplValues = new List<string>();
             using (XLWorkbook workbook = new XLWorkbook(fileFullPath))
             {
                 IXLWorksheet worksheet = workbook.Worksheet(1);// 첫 번째 시트를 가져옴
@@ -53,7 +52,7 @@ namespace ExcelConditionPainter
             }
             return table;
         }
-        private void openToolStripMenuItem_Click(object sender, EventArgs e)
+        private void openMenuItem_Click(object sender, EventArgs e)
         {
             using (OpenFileDialog openFileDialog = new OpenFileDialog())
             {
@@ -63,12 +62,12 @@ namespace ExcelConditionPainter
                 openFileDialog.Multiselect = false;
                 if (openFileDialog.ShowDialog() != DialogResult.OK)
                     return;
-                sPath = openFileDialog.FileName;
+                sourceFilePath = openFileDialog.FileName;
             }
 
-            if (File.Exists(sPath) == false)
+            if (File.Exists(sourceFilePath) == false)
                 return;
-            switch (Path.GetExtension(sPath))
+            switch (Path.GetExtension(sourceFilePath))
             {
                 case ".xlsx":
                 case ".xls":
@@ -77,110 +76,110 @@ namespace ExcelConditionPainter
                     MessageBox.Show("지원하지 않는 파일 형식입니다.");
                     return;
             }
-            this.Text = $"Condition Excel Painter - {sPath}";
-            dgvMain.DataSource = LoadFileToDataTable(sPath);
-            using (FormSetConditions formDataDetails = new FormSetConditions(dgvMain))
+            this.Text = $"Condition Excel Painter - {sourceFilePath}";
+            mainGridView.DataSource = LoadFileToDataTable(sourceFilePath);
+            using (FormSetConditions formDataDetails = new FormSetConditions(mainGridView))
             {
                 formDataDetails.Owner = this;
                 formDataDetails.ShowDialog();
-                conditionCalculator = formDataDetails.conditionCalculator; // conditionCalculator 가 null이면 안됨
-                if (conditionCalculator is null)
+                conditionContext = formDataDetails.ConditionContext; // conditionContext 가 null이면 안됨
+                if (conditionContext is null)
                     return;
-                conditionCalculator.PaintDataGridView(dgvMain);// 조건 계산 후 테이블 업데이트
+                conditionContext.PaintDataGridView(mainGridView);// 조건 계산 후 테이블 업데이트
             }
         }
-        private void helpToolStripMenuItem_Click(object sender, EventArgs e)
+        private void helpMenuItem_Click(object sender, EventArgs e)
         {
             Process.Start("https://growndombo.tistory.com/7");
         }
-        private void optionsToolStripMenuItem_Click(object sender, EventArgs e)
+        private void optionsMenuItem_Click(object sender, EventArgs e)
         {
-            formOptions.ShowDialog();
+            optionsForm.ShowDialog();
         }
-        private void dgvMain_DataBindingComplete(object sender, DataGridViewBindingCompleteEventArgs e)
+        private void mainGridView_DataBindingComplete(object sender, DataGridViewBindingCompleteEventArgs e)
         {
-            foreach (DataGridViewColumn col in dgvMain.Columns)
+            foreach (DataGridViewColumn col in mainGridView.Columns)
                 col.SortMode = DataGridViewColumnSortMode.NotSortable;
         }
-        private void dgvMain_RowPostPaint(object sender, DataGridViewRowPostPaintEventArgs e)
+        private void mainGridView_RowPostPaint(object sender, DataGridViewRowPostPaintEventArgs e)
         {
-            string rowIdx = (e.RowIndex + 1).ToString(); // 1부터 시작하는 행 번호
+            string rowIndex = (e.RowIndex + 1).ToString(); // 1부터 시작하는 행 번호
             StringFormat centerFormat = new StringFormat()
             {
                 Alignment = StringAlignment.Center,
                 LineAlignment = StringAlignment.Center
             };
             // RowHeader에 행 번호 그리기
-            Rectangle headerBounds = new Rectangle(e.RowBounds.Left, e.RowBounds.Top, dgvMain.RowHeadersWidth, e.RowBounds.Height);
-            e.Graphics.DrawString(rowIdx, dgvMain.Font, SystemBrushes.ControlText, headerBounds, centerFormat);
+            Rectangle headerBounds = new Rectangle(e.RowBounds.Left, e.RowBounds.Top, mainGridView.RowHeadersWidth, e.RowBounds.Height);
+            e.Graphics.DrawString(rowIndex, mainGridView.Font, SystemBrushes.ControlText, headerBounds, centerFormat);
         }
-        private void btnExport_Click(object sender, EventArgs e)
+        private void exportButton_Click(object sender, EventArgs e)
         {
-            if (string.IsNullOrEmpty(sPath))
+            if (string.IsNullOrEmpty(sourceFilePath))
             {
-                MessageBox.Show($"Path Error : {sPath}", "오류", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show($"Path Error : {sourceFilePath}", "오류", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
-            if (conditionCalculator is null)
+            if (conditionContext is null)
             {
                 MessageBox.Show("Condition Set Error", "오류", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
             try
             {
-                string dir = Path.Combine(Path.GetDirectoryName(sPath), "ExcelPainter");
-                Directory.CreateDirectory(dir); // 이미 존재하면 아무 일도 안 함
+                string exportDirectory = Path.Combine(Path.GetDirectoryName(sourceFilePath), "ExcelPainter");
+                Directory.CreateDirectory(exportDirectory); // 이미 존재하면 아무 일도 안 함
 
-                string sFileName = Path.GetFileNameWithoutExtension(sPath);
-                string sExtension = Path.GetExtension(sPath);
-                string exportDefaultFilePath = Path.Combine(dir, $"{sFileName}_Default{sExtension}");
+                string fileName = Path.GetFileNameWithoutExtension(sourceFilePath);
+                string extension = Path.GetExtension(sourceFilePath);
+                string exportDefaultFilePath = Path.Combine(exportDirectory, $"{fileName}_Default{extension}");
 
                 // DataGridView 데이터를 Excel로 그대로 출력
-                using (XLWorkbook workBook = makeXLWorkBookDefault(out IXLWorksheet worksheet))
+                using (XLWorkbook workbook = CreateDefaultWorkbook(out IXLWorksheet worksheet))
                 {
-                    for (int rowIdx = 0; rowIdx < dgvMain.Rows.Count; rowIdx++)
+                    for (int rowIndex = 0; rowIndex < mainGridView.Rows.Count; rowIndex++)
                     {
-                        DataGridViewRow row = dgvMain.Rows[rowIdx];
+                        DataGridViewRow row = mainGridView.Rows[rowIndex];
                         AddRow(row, ref worksheet);
                     }
-                    SaveWorkBook(workBook, exportDefaultFilePath);
+                    SaveWorkbook(workbook, exportDefaultFilePath);
                 }
                 // 옵션 1 조결별 출력
                 if (AppOptions.ExportSplitByConditions)
                 {
-                    DataTable dataTable = dgvMain.DataSource as DataTable;
-                    Dictionary<int, XLWorkbook> dicworkbook = new Dictionary<int, XLWorkbook>();
-                    for (int rowIdx = 0; rowIdx < dataTable.Rows.Count; rowIdx++)
+                    DataTable dataTable = mainGridView.DataSource as DataTable;
+                    Dictionary<int, XLWorkbook> workbooksByConditionIndex = new Dictionary<int, XLWorkbook>();
+                    for (int rowIndex = 0; rowIndex < dataTable.Rows.Count; rowIndex++)
                     {
-                        DataRow row = dataTable.Rows[rowIdx];
-                        string sPrimaryKey = row[row.Table.PrimaryKey[0]].ToString(); // 키가 1개라고 가정하기 때문에 가능
-                        if (conditionCalculator.dicRowConditions.TryGetValue(sPrimaryKey, out List<ICondtions> liCondtions))
+                        DataRow row = dataTable.Rows[rowIndex];
+                        string primaryKey = row[row.Table.PrimaryKey[0]].ToString(); // 키가 1개라고 가정하기 때문에 가능
+                        if (conditionContext.ConditionsByPrimaryValue.TryGetValue(primaryKey, out List<IConditionRule> conditionRules))
                         {
-                            for (int idxCondtion = 0; idxCondtion < liCondtions.Count; idxCondtion++)
+                            for (int conditionIndex = 0; conditionIndex < conditionRules.Count; conditionIndex++)
                             {
-                                ICondtions condtion = liCondtions[idxCondtion];
-                                int nAppliedConditionIndex = condtion.nAppliedConditionIndex;
+                                IConditionRule conditionRule = conditionRules[conditionIndex];
+                                int appliedConditionIndex = conditionRule.AppliedConditionIndex;
                                 IXLWorksheet worksheet;
-                                if (dicworkbook.TryGetValue(nAppliedConditionIndex, out XLWorkbook workBook))
-                                    worksheet = workBook.Worksheets.Worksheet(FIRST_SHEET_NAME);
+                                if (workbooksByConditionIndex.TryGetValue(appliedConditionIndex, out XLWorkbook workbook))
+                                    worksheet = workbook.Worksheets.Worksheet(FirstSheetName);
                                 else
                                 {
-                                    workBook = makeXLWorkBookDefault(out worksheet);
-                                    dicworkbook[nAppliedConditionIndex] = workBook;
+                                    workbook = CreateDefaultWorkbook(out worksheet);
+                                    workbooksByConditionIndex[appliedConditionIndex] = workbook;
                                 }
-                                AddRow(dgvMain.Rows[rowIdx], ref worksheet);
+                                AddRow(mainGridView.Rows[rowIndex], ref worksheet);
                             }
                         }
                     }
-                    foreach (KeyValuePair<int, XLWorkbook> kvp in dicworkbook)
+                    foreach (KeyValuePair<int, XLWorkbook> workbookEntry in workbooksByConditionIndex)
                     {
-                        int nAppliedConditionIndex = kvp.Key;
-                        XLWorkbook workBook = kvp.Value;
-                        string sPath = Path.Combine(dir, $"{sFileName}_{nAppliedConditionIndex}{sExtension}");
-                        SaveWorkBook(workBook, sPath);
-                        workBook.Dispose();
+                        int appliedConditionIndex = workbookEntry.Key;
+                        XLWorkbook workbook = workbookEntry.Value;
+                        string conditionFilePath = Path.Combine(exportDirectory, $"{fileName}_{appliedConditionIndex}{extension}");
+                        SaveWorkbook(workbook, conditionFilePath);
+                        workbook.Dispose();
                     }
-                    Process.Start(dir);
+                    Process.Start(exportDirectory);
                 }
                 else
                     Process.Start(exportDefaultFilePath);
@@ -190,14 +189,14 @@ namespace ExcelConditionPainter
                 MessageBox.Show($"에러 {ex}", "오류", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-        private XLWorkbook makeXLWorkBookDefault(out IXLWorksheet worksheet)
+        private XLWorkbook CreateDefaultWorkbook(out IXLWorksheet worksheet)
         {
             XLWorkbook workbook = new XLWorkbook();
-            worksheet = workbook.Worksheets.Add(FIRST_SHEET_NAME);
+            worksheet = workbook.Worksheets.Add(FirstSheetName);
             // DataGridView 헤더를 Excel로 복사
-            for (int col = 0; col < dgvMain.Columns.Count; col++)
-                worksheet.Cell(1, col + 1).Value = dgvMain.Columns[col].HeaderText; // 헤더
-            IXLRange headerRange = worksheet.Range(1, 1, 1, dgvMain.Columns.Count);
+            for (int col = 0; col < mainGridView.Columns.Count; col++)
+                worksheet.Cell(1, col + 1).Value = mainGridView.Columns[col].HeaderText; // 헤더
+            IXLRange headerRange = worksheet.Range(1, 1, 1, mainGridView.Columns.Count);
             headerRange.Style.Font.Bold = true;
             return workbook;
         }
@@ -211,23 +210,23 @@ namespace ExcelConditionPainter
 
             int colCount = row.DataGridView?.Columns.Count ?? row.Cells.Count;
 
-            for (int colIdx = 0; colIdx < colCount; colIdx++)
+            for (int columnIndex = 0; columnIndex < colCount; columnIndex++)
             {
-                DataGridViewCell cell = row.Cells[colIdx];
-                IXLCell excelCell = worksheet.Cell(excelRow, 1 + colIdx);
+                DataGridViewCell cell = row.Cells[columnIndex];
+                IXLCell excelCell = worksheet.Cell(excelRow, 1 + columnIndex);
 
                 // 값 설정 (숫자는 숫자로, 아니면 문자열)
                 object val = cell.Value;
                 if (val != null)
                 {
-                    string s = val.ToString();
-                    if (double.TryParse(s, out double d))
+                    string valueText = val.ToString();
+                    if (double.TryParse(valueText, out double d))
                     {
                         excelCell.Value = d;
                         excelCell.Style.NumberFormat.Format = "0";
                     }
                     else
-                        excelCell.Value = s;
+                        excelCell.Value = valueText;
                 }
                 else
                 {
@@ -248,24 +247,24 @@ namespace ExcelConditionPainter
                     excelCell.Style.Font.FontColor = XLColor.FromColor(cellFore);
             }
         }
-        private void SaveWorkBook(XLWorkbook workBook, string sPath)
+        private void SaveWorkbook(XLWorkbook workbook, string targetFilePath)
         {
-            IXLWorksheet worksheet = workBook.Worksheets.Worksheet(FIRST_SHEET_NAME);
+            IXLWorksheet worksheet = workbook.Worksheets.Worksheet(FirstSheetName);
             worksheet.Columns().AdjustToContents();
             IXLRange usedRange = worksheet.RangeUsed();
             usedRange.Style.Border.OutsideBorder = XLBorderStyleValues.Thin;
             usedRange.Style.Border.InsideBorder = XLBorderStyleValues.Thin;
             // Excel 파일 저장
-            workBook.SaveAs(sPath);
+            workbook.SaveAs(targetFilePath);
         }
         protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
         {
             if (keyData == (Keys.Control | Keys.F)) // Control + F 키 조합 확인
             {
-                if (formSearch.Visible) // FormSearch가 보이지 않는 경우
-                    formSearch.Focus(); // 이미 열려 있는 경우 포커스 설정
+                if (searchForm.Visible) // FormSearch가 보이지 않는 경우
+                    searchForm.Focus(); // 이미 열려 있는 경우 포커스 설정
                 else
-                    formSearch.Show(); // FormSearch 창 열기
+                    searchForm.Show(); // FormSearch 창 열기
                 return true; // 키 이벤트 처리 완료
             }
             return base.ProcessCmdKey(ref msg, keyData); // 기본 처리

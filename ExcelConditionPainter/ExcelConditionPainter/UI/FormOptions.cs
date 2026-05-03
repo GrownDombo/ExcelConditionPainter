@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -15,9 +15,9 @@ namespace ExcelConditionPainter
         public FormOptions()
         {
             InitializeComponent();
-            cbExportSplitByConditions.DataBindings.Add("Checked", Properties.Settings.Default, nameof(Properties.Settings.Default.ExportSplitByConditions), false, DataSourceUpdateMode.OnPropertyChanged);
+            exportSplitByConditionsCheckBox.DataBindings.Add("Checked", Properties.Settings.Default, nameof(Properties.Settings.Default.ExportSplitByConditions), false, DataSourceUpdateMode.OnPropertyChanged);
         }
-        private void btnSave_Click(object sender, EventArgs e)
+        private void saveButton_Click(object sender, EventArgs e)
         {
             Properties.Settings.Default.Save();
             this.Close();

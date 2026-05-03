@@ -1,4 +1,4 @@
-﻿namespace ExcelConditionPainter
+namespace ExcelConditionPainter
 {
     partial class FormSetConditions
     {
@@ -28,319 +28,319 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.tlpMain = new System.Windows.Forms.TableLayoutPanel();
-            this.cbxOrderBy2 = new System.Windows.Forms.ComboBox();
-            this.lbOrderBy2 = new System.Windows.Forms.Label();
-            this.vflpCondition = new GDombo_CustomControl.VerticalFlowLayoutPanel();
-            this.ucConditionDuplicate1 = new ExcelConditionPainter.ucConditionDuplicate();
-            this.ucConditionOrder1 = new ExcelConditionPainter.ucConditionOrderExceptDuplication();
-            this.ucConditionCount1 = new ExcelConditionPainter.ucConditionQuantity();
-            this.ucConditionCount2 = new ExcelConditionPainter.ucConditionQuantity();
-            this.cbxBuyCntCol = new System.Windows.Forms.ComboBox();
-            this.lbBuyCntCol = new System.Windows.Forms.Label();
-            this.cbxGoodsOptionCol = new System.Windows.Forms.ComboBox();
-            this.lbGoodsOptionCol = new System.Windows.Forms.Label();
-            this.cbxAddCondition = new System.Windows.Forms.ComboBox();
-            this.lbAddCondition = new System.Windows.Forms.Label();
-            this.cbxOrderBy = new System.Windows.Forms.ComboBox();
-            this.lbOrderBy = new System.Windows.Forms.Label();
-            this.lbSelectPrimaryKey = new System.Windows.Forms.Label();
-            this.cbxPrimaryKey = new System.Windows.Forms.ComboBox();
-            this.btnAddCondtion = new System.Windows.Forms.Button();
-            this.vflpOptionCnt = new GDombo_CustomControl.VerticalFlowLayoutPanel();
-            this.pnBottom = new System.Windows.Forms.Panel();
-            this.btnSet = new System.Windows.Forms.Button();
-            this.tlpMain.SuspendLayout();
-            this.vflpCondition.SuspendLayout();
-            this.pnBottom.SuspendLayout();
+            this.mainLayoutPanel = new System.Windows.Forms.TableLayoutPanel();
+            this.secondarySortColumnComboBox = new System.Windows.Forms.ComboBox();
+            this.secondarySortColumnLabel = new System.Windows.Forms.Label();
+            this.conditionFlowPanel = new GDombo_CustomControl.VerticalFlowLayoutPanel();
+            this.duplicateConditionControl = new ExcelConditionPainter.DuplicateConditionControl();
+            this.distinctOrderConditionControl = new ExcelConditionPainter.DistinctOrderConditionControl();
+            this.primaryQuantityConditionControl = new ExcelConditionPainter.QuantityConditionControl();
+            this.secondaryQuantityConditionControl = new ExcelConditionPainter.QuantityConditionControl();
+            this.buyCountColumnComboBox = new System.Windows.Forms.ComboBox();
+            this.buyCountColumnLabel = new System.Windows.Forms.Label();
+            this.goodsOptionColumnComboBox = new System.Windows.Forms.ComboBox();
+            this.goodsOptionColumnLabel = new System.Windows.Forms.Label();
+            this.addConditionComboBox = new System.Windows.Forms.ComboBox();
+            this.addConditionLabel = new System.Windows.Forms.Label();
+            this.primarySortColumnComboBox = new System.Windows.Forms.ComboBox();
+            this.primarySortColumnLabel = new System.Windows.Forms.Label();
+            this.primaryKeyLabel = new System.Windows.Forms.Label();
+            this.primaryKeyComboBox = new System.Windows.Forms.ComboBox();
+            this.addConditionButton = new System.Windows.Forms.Button();
+            this.optionQuantityFlowPanel = new GDombo_CustomControl.VerticalFlowLayoutPanel();
+            this.bottomPanel = new System.Windows.Forms.Panel();
+            this.setButton = new System.Windows.Forms.Button();
+            this.mainLayoutPanel.SuspendLayout();
+            this.conditionFlowPanel.SuspendLayout();
+            this.bottomPanel.SuspendLayout();
             this.SuspendLayout();
             // 
-            // tlpMain
+            // mainLayoutPanel
             // 
-            this.tlpMain.AutoSize = true;
-            this.tlpMain.ColumnCount = 3;
-            this.tlpMain.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 140F));
-            this.tlpMain.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tlpMain.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 30F));
-            this.tlpMain.Controls.Add(this.cbxOrderBy2, 1, 2);
-            this.tlpMain.Controls.Add(this.lbOrderBy2, 0, 2);
-            this.tlpMain.Controls.Add(this.vflpCondition, 0, 7);
-            this.tlpMain.Controls.Add(this.cbxBuyCntCol, 1, 3);
-            this.tlpMain.Controls.Add(this.lbBuyCntCol, 0, 3);
-            this.tlpMain.Controls.Add(this.cbxGoodsOptionCol, 1, 4);
-            this.tlpMain.Controls.Add(this.lbGoodsOptionCol, 0, 4);
-            this.tlpMain.Controls.Add(this.cbxAddCondition, 1, 6);
-            this.tlpMain.Controls.Add(this.lbAddCondition, 0, 6);
-            this.tlpMain.Controls.Add(this.cbxOrderBy, 1, 1);
-            this.tlpMain.Controls.Add(this.lbOrderBy, 0, 1);
-            this.tlpMain.Controls.Add(this.lbSelectPrimaryKey, 0, 0);
-            this.tlpMain.Controls.Add(this.cbxPrimaryKey, 1, 0);
-            this.tlpMain.Controls.Add(this.btnAddCondtion, 2, 6);
-            this.tlpMain.Controls.Add(this.vflpOptionCnt, 0, 5);
-            this.tlpMain.Controls.Add(this.pnBottom, 0, 8);
-            this.tlpMain.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tlpMain.Location = new System.Drawing.Point(0, 0);
-            this.tlpMain.Name = "tlpMain";
-            this.tlpMain.RowCount = 9;
-            this.tlpMain.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tlpMain.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tlpMain.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tlpMain.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tlpMain.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tlpMain.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tlpMain.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tlpMain.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tlpMain.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 40F));
-            this.tlpMain.Size = new System.Drawing.Size(860, 389);
-            this.tlpMain.TabIndex = 0;
+            this.mainLayoutPanel.AutoSize = true;
+            this.mainLayoutPanel.ColumnCount = 3;
+            this.mainLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 140F));
+            this.mainLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.mainLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 30F));
+            this.mainLayoutPanel.Controls.Add(this.secondarySortColumnComboBox, 1, 2);
+            this.mainLayoutPanel.Controls.Add(this.secondarySortColumnLabel, 0, 2);
+            this.mainLayoutPanel.Controls.Add(this.conditionFlowPanel, 0, 7);
+            this.mainLayoutPanel.Controls.Add(this.buyCountColumnComboBox, 1, 3);
+            this.mainLayoutPanel.Controls.Add(this.buyCountColumnLabel, 0, 3);
+            this.mainLayoutPanel.Controls.Add(this.goodsOptionColumnComboBox, 1, 4);
+            this.mainLayoutPanel.Controls.Add(this.goodsOptionColumnLabel, 0, 4);
+            this.mainLayoutPanel.Controls.Add(this.addConditionComboBox, 1, 6);
+            this.mainLayoutPanel.Controls.Add(this.addConditionLabel, 0, 6);
+            this.mainLayoutPanel.Controls.Add(this.primarySortColumnComboBox, 1, 1);
+            this.mainLayoutPanel.Controls.Add(this.primarySortColumnLabel, 0, 1);
+            this.mainLayoutPanel.Controls.Add(this.primaryKeyLabel, 0, 0);
+            this.mainLayoutPanel.Controls.Add(this.primaryKeyComboBox, 1, 0);
+            this.mainLayoutPanel.Controls.Add(this.addConditionButton, 2, 6);
+            this.mainLayoutPanel.Controls.Add(this.optionQuantityFlowPanel, 0, 5);
+            this.mainLayoutPanel.Controls.Add(this.bottomPanel, 0, 8);
+            this.mainLayoutPanel.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.mainLayoutPanel.Location = new System.Drawing.Point(0, 0);
+            this.mainLayoutPanel.Name = "mainLayoutPanel";
+            this.mainLayoutPanel.RowCount = 9;
+            this.mainLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.mainLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.mainLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.mainLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.mainLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.mainLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.mainLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.mainLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.mainLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 40F));
+            this.mainLayoutPanel.Size = new System.Drawing.Size(860, 389);
+            this.mainLayoutPanel.TabIndex = 0;
             // 
-            // cbxOrderBy2
+            // secondarySortColumnComboBox
             // 
-            this.cbxOrderBy2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
-            this.cbxOrderBy2.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cbxOrderBy2.Font = new System.Drawing.Font("돋움", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
-            this.cbxOrderBy2.FormattingEnabled = true;
-            this.cbxOrderBy2.Location = new System.Drawing.Point(143, 65);
-            this.cbxOrderBy2.Name = "cbxOrderBy2";
-            this.cbxOrderBy2.Size = new System.Drawing.Size(684, 20);
-            this.cbxOrderBy2.TabIndex = 16;
+            this.secondarySortColumnComboBox.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
+            this.secondarySortColumnComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.secondarySortColumnComboBox.Font = new System.Drawing.Font("돋움", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
+            this.secondarySortColumnComboBox.FormattingEnabled = true;
+            this.secondarySortColumnComboBox.Location = new System.Drawing.Point(143, 65);
+            this.secondarySortColumnComboBox.Name = "secondarySortColumnComboBox";
+            this.secondarySortColumnComboBox.Size = new System.Drawing.Size(684, 20);
+            this.secondarySortColumnComboBox.TabIndex = 16;
             // 
-            // lbOrderBy2
+            // secondarySortColumnLabel
             // 
-            this.lbOrderBy2.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lbOrderBy2.Font = new System.Drawing.Font("돋움", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
-            this.lbOrderBy2.Location = new System.Drawing.Point(3, 60);
-            this.lbOrderBy2.Name = "lbOrderBy2";
-            this.lbOrderBy2.Size = new System.Drawing.Size(134, 30);
-            this.lbOrderBy2.TabIndex = 15;
-            this.lbOrderBy2.Text = "졍렬 기준 선택2 :";
-            this.lbOrderBy2.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.secondarySortColumnLabel.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.secondarySortColumnLabel.Font = new System.Drawing.Font("돋움", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
+            this.secondarySortColumnLabel.Location = new System.Drawing.Point(3, 60);
+            this.secondarySortColumnLabel.Name = "secondarySortColumnLabel";
+            this.secondarySortColumnLabel.Size = new System.Drawing.Size(134, 30);
+            this.secondarySortColumnLabel.TabIndex = 15;
+            this.secondarySortColumnLabel.Text = "졍렬 기준 선택2 :";
+            this.secondarySortColumnLabel.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
-            // vflpCondition
+            // conditionFlowPanel
             // 
-            this.vflpCondition.AutoScroll = true;
-            this.vflpCondition.AutoSize = true;
-            this.vflpCondition.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.tlpMain.SetColumnSpan(this.vflpCondition, 3);
-            this.vflpCondition.Controls.Add(this.ucConditionDuplicate1);
-            this.vflpCondition.Controls.Add(this.ucConditionOrder1);
-            this.vflpCondition.Controls.Add(this.ucConditionCount1);
-            this.vflpCondition.Controls.Add(this.ucConditionCount2);
-            this.vflpCondition.Dock = System.Windows.Forms.DockStyle.Top;
-            this.vflpCondition.FlowDirection = System.Windows.Forms.FlowDirection.TopDown;
-            this.vflpCondition.Location = new System.Drawing.Point(3, 189);
-            this.vflpCondition.MaximumSize = new System.Drawing.Size(0, 300);
-            this.vflpCondition.Name = "vflpCondition";
-            this.vflpCondition.Size = new System.Drawing.Size(854, 144);
-            this.vflpCondition.TabIndex = 1;
-            this.vflpCondition.WrapContents = false;
+            this.conditionFlowPanel.AutoScroll = true;
+            this.conditionFlowPanel.AutoSize = true;
+            this.conditionFlowPanel.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.mainLayoutPanel.SetColumnSpan(this.conditionFlowPanel, 3);
+            this.conditionFlowPanel.Controls.Add(this.duplicateConditionControl);
+            this.conditionFlowPanel.Controls.Add(this.distinctOrderConditionControl);
+            this.conditionFlowPanel.Controls.Add(this.primaryQuantityConditionControl);
+            this.conditionFlowPanel.Controls.Add(this.secondaryQuantityConditionControl);
+            this.conditionFlowPanel.Dock = System.Windows.Forms.DockStyle.Top;
+            this.conditionFlowPanel.FlowDirection = System.Windows.Forms.FlowDirection.TopDown;
+            this.conditionFlowPanel.Location = new System.Drawing.Point(3, 189);
+            this.conditionFlowPanel.MaximumSize = new System.Drawing.Size(0, 300);
+            this.conditionFlowPanel.Name = "conditionFlowPanel";
+            this.conditionFlowPanel.Size = new System.Drawing.Size(854, 144);
+            this.conditionFlowPanel.TabIndex = 1;
+            this.conditionFlowPanel.WrapContents = false;
             // 
-            // ucConditionDuplicate1
+            // duplicateConditionControl
             // 
-            this.ucConditionDuplicate1.ConditionType = ExcelConditionPainter.eConditionType.Fill;
-            this.ucConditionDuplicate1.Font = new System.Drawing.Font("돋움", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
-            this.ucConditionDuplicate1.Level = 0;
-            this.ucConditionDuplicate1.Location = new System.Drawing.Point(3, 3);
-            this.ucConditionDuplicate1.Name = "ucConditionDuplicate1";
-            this.ucConditionDuplicate1.SelectColor = System.Drawing.Color.Coral;
-            this.ucConditionDuplicate1.Size = new System.Drawing.Size(827, 30);
-            this.ucConditionDuplicate1.TabIndex = 4;
+            this.duplicateConditionControl.PaintTarget = ExcelConditionPainter.PaintTarget.Fill;
+            this.duplicateConditionControl.Font = new System.Drawing.Font("돋움", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
+            this.duplicateConditionControl.PriorityLevel = 0;
+            this.duplicateConditionControl.Location = new System.Drawing.Point(3, 3);
+            this.duplicateConditionControl.Name = "duplicateConditionControl";
+            this.duplicateConditionControl.SelectedColor = System.Drawing.Color.Coral;
+            this.duplicateConditionControl.Size = new System.Drawing.Size(827, 30);
+            this.duplicateConditionControl.TabIndex = 4;
             // 
-            // ucConditionOrder1
+            // distinctOrderConditionControl
             // 
-            this.ucConditionOrder1.ConditionType = ExcelConditionPainter.eConditionType.Font;
-            this.ucConditionOrder1.Level = 0;
-            this.ucConditionOrder1.Location = new System.Drawing.Point(3, 39);
-            this.ucConditionOrder1.Name = "ucConditionOrder1";
-            this.ucConditionOrder1.nLimitPeopleCnt = 10;
-            this.ucConditionOrder1.SelectColor = System.Drawing.Color.Red;
-            this.ucConditionOrder1.Size = new System.Drawing.Size(827, 30);
-            this.ucConditionOrder1.TabIndex = 1;
+            this.distinctOrderConditionControl.PaintTarget = ExcelConditionPainter.PaintTarget.Font;
+            this.distinctOrderConditionControl.PriorityLevel = 0;
+            this.distinctOrderConditionControl.Location = new System.Drawing.Point(3, 39);
+            this.distinctOrderConditionControl.Name = "distinctOrderConditionControl";
+            this.distinctOrderConditionControl.PeopleLimit = 10;
+            this.distinctOrderConditionControl.SelectedColor = System.Drawing.Color.Red;
+            this.distinctOrderConditionControl.Size = new System.Drawing.Size(827, 30);
+            this.distinctOrderConditionControl.TabIndex = 1;
             // 
-            // ucConditionCount1
+            // primaryQuantityConditionControl
             // 
-            this.ucConditionCount1.ConditionType = ExcelConditionPainter.eConditionType.Fill;
-            this.ucConditionCount1.Font = new System.Drawing.Font("돋움", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
-            this.ucConditionCount1.Level = 1;
-            this.ucConditionCount1.Location = new System.Drawing.Point(3, 75);
-            this.ucConditionCount1.Name = "ucConditionCount1";
-            this.ucConditionCount1.nGoodsCount = 120;
-            this.ucConditionCount1.nLimitPeopleCnt = 50;
-            this.ucConditionCount1.SelectColor = System.Drawing.Color.Green;
-            this.ucConditionCount1.Size = new System.Drawing.Size(827, 30);
-            this.ucConditionCount1.TabIndex = 2;
+            this.primaryQuantityConditionControl.PaintTarget = ExcelConditionPainter.PaintTarget.Fill;
+            this.primaryQuantityConditionControl.Font = new System.Drawing.Font("돋움", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
+            this.primaryQuantityConditionControl.PriorityLevel = 1;
+            this.primaryQuantityConditionControl.Location = new System.Drawing.Point(3, 75);
+            this.primaryQuantityConditionControl.Name = "primaryQuantityConditionControl";
+            this.primaryQuantityConditionControl.GoodsCount = 120;
+            this.primaryQuantityConditionControl.PeopleLimit = 50;
+            this.primaryQuantityConditionControl.SelectedColor = System.Drawing.Color.Green;
+            this.primaryQuantityConditionControl.Size = new System.Drawing.Size(827, 30);
+            this.primaryQuantityConditionControl.TabIndex = 2;
             // 
-            // ucConditionCount2
+            // secondaryQuantityConditionControl
             // 
-            this.ucConditionCount2.ConditionType = ExcelConditionPainter.eConditionType.Fill;
-            this.ucConditionCount2.Font = new System.Drawing.Font("돋움", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
-            this.ucConditionCount2.Level = 2;
-            this.ucConditionCount2.Location = new System.Drawing.Point(3, 111);
-            this.ucConditionCount2.Name = "ucConditionCount2";
-            this.ucConditionCount2.nGoodsCount = 60;
-            this.ucConditionCount2.nLimitPeopleCnt = 50;
-            this.ucConditionCount2.SelectColor = System.Drawing.Color.Yellow;
-            this.ucConditionCount2.Size = new System.Drawing.Size(827, 30);
-            this.ucConditionCount2.TabIndex = 3;
+            this.secondaryQuantityConditionControl.PaintTarget = ExcelConditionPainter.PaintTarget.Fill;
+            this.secondaryQuantityConditionControl.Font = new System.Drawing.Font("돋움", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
+            this.secondaryQuantityConditionControl.PriorityLevel = 2;
+            this.secondaryQuantityConditionControl.Location = new System.Drawing.Point(3, 111);
+            this.secondaryQuantityConditionControl.Name = "secondaryQuantityConditionControl";
+            this.secondaryQuantityConditionControl.GoodsCount = 60;
+            this.secondaryQuantityConditionControl.PeopleLimit = 50;
+            this.secondaryQuantityConditionControl.SelectedColor = System.Drawing.Color.Yellow;
+            this.secondaryQuantityConditionControl.Size = new System.Drawing.Size(827, 30);
+            this.secondaryQuantityConditionControl.TabIndex = 3;
             // 
-            // cbxBuyCntCol
+            // buyCountColumnComboBox
             // 
-            this.cbxBuyCntCol.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
-            this.cbxBuyCntCol.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cbxBuyCntCol.Font = new System.Drawing.Font("돋움", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
-            this.cbxBuyCntCol.FormattingEnabled = true;
-            this.cbxBuyCntCol.Location = new System.Drawing.Point(143, 95);
-            this.cbxBuyCntCol.Name = "cbxBuyCntCol";
-            this.cbxBuyCntCol.Size = new System.Drawing.Size(684, 20);
-            this.cbxBuyCntCol.TabIndex = 13;
+            this.buyCountColumnComboBox.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
+            this.buyCountColumnComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.buyCountColumnComboBox.Font = new System.Drawing.Font("돋움", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
+            this.buyCountColumnComboBox.FormattingEnabled = true;
+            this.buyCountColumnComboBox.Location = new System.Drawing.Point(143, 95);
+            this.buyCountColumnComboBox.Name = "buyCountColumnComboBox";
+            this.buyCountColumnComboBox.Size = new System.Drawing.Size(684, 20);
+            this.buyCountColumnComboBox.TabIndex = 13;
             // 
-            // lbBuyCntCol
+            // buyCountColumnLabel
             // 
-            this.lbBuyCntCol.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lbBuyCntCol.Font = new System.Drawing.Font("돋움", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
-            this.lbBuyCntCol.Location = new System.Drawing.Point(3, 90);
-            this.lbBuyCntCol.Name = "lbBuyCntCol";
-            this.lbBuyCntCol.Size = new System.Drawing.Size(134, 30);
-            this.lbBuyCntCol.TabIndex = 12;
-            this.lbBuyCntCol.Text = "수량 컬럼 선택 :";
-            this.lbBuyCntCol.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.buyCountColumnLabel.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.buyCountColumnLabel.Font = new System.Drawing.Font("돋움", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
+            this.buyCountColumnLabel.Location = new System.Drawing.Point(3, 90);
+            this.buyCountColumnLabel.Name = "buyCountColumnLabel";
+            this.buyCountColumnLabel.Size = new System.Drawing.Size(134, 30);
+            this.buyCountColumnLabel.TabIndex = 12;
+            this.buyCountColumnLabel.Text = "수량 컬럼 선택 :";
+            this.buyCountColumnLabel.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
-            // cbxGoodsOptionCol
+            // goodsOptionColumnComboBox
             // 
-            this.cbxGoodsOptionCol.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
-            this.cbxGoodsOptionCol.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cbxGoodsOptionCol.Font = new System.Drawing.Font("돋움", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
-            this.cbxGoodsOptionCol.FormattingEnabled = true;
-            this.cbxGoodsOptionCol.Location = new System.Drawing.Point(143, 125);
-            this.cbxGoodsOptionCol.Name = "cbxGoodsOptionCol";
-            this.cbxGoodsOptionCol.Size = new System.Drawing.Size(684, 20);
-            this.cbxGoodsOptionCol.TabIndex = 10;
-            this.cbxGoodsOptionCol.SelectedIndexChanged += new System.EventHandler(this.cbxSelectOption_SelectedIndexChanged);
+            this.goodsOptionColumnComboBox.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
+            this.goodsOptionColumnComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.goodsOptionColumnComboBox.Font = new System.Drawing.Font("돋움", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
+            this.goodsOptionColumnComboBox.FormattingEnabled = true;
+            this.goodsOptionColumnComboBox.Location = new System.Drawing.Point(143, 125);
+            this.goodsOptionColumnComboBox.Name = "goodsOptionColumnComboBox";
+            this.goodsOptionColumnComboBox.Size = new System.Drawing.Size(684, 20);
+            this.goodsOptionColumnComboBox.TabIndex = 10;
+            this.goodsOptionColumnComboBox.SelectedIndexChanged += new System.EventHandler(this.goodsOptionColumnComboBox_SelectedIndexChanged);
             // 
-            // lbGoodsOptionCol
+            // goodsOptionColumnLabel
             // 
-            this.lbGoodsOptionCol.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lbGoodsOptionCol.Font = new System.Drawing.Font("돋움", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
-            this.lbGoodsOptionCol.Location = new System.Drawing.Point(3, 120);
-            this.lbGoodsOptionCol.Name = "lbGoodsOptionCol";
-            this.lbGoodsOptionCol.Size = new System.Drawing.Size(134, 30);
-            this.lbGoodsOptionCol.TabIndex = 9;
-            this.lbGoodsOptionCol.Text = "옵션 컬럼 선택 :";
-            this.lbGoodsOptionCol.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.goodsOptionColumnLabel.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.goodsOptionColumnLabel.Font = new System.Drawing.Font("돋움", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
+            this.goodsOptionColumnLabel.Location = new System.Drawing.Point(3, 120);
+            this.goodsOptionColumnLabel.Name = "goodsOptionColumnLabel";
+            this.goodsOptionColumnLabel.Size = new System.Drawing.Size(134, 30);
+            this.goodsOptionColumnLabel.TabIndex = 9;
+            this.goodsOptionColumnLabel.Text = "옵션 컬럼 선택 :";
+            this.goodsOptionColumnLabel.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
-            // cbxAddCondition
+            // addConditionComboBox
             // 
-            this.cbxAddCondition.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
-            this.cbxAddCondition.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cbxAddCondition.Font = new System.Drawing.Font("돋움", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
-            this.cbxAddCondition.FormattingEnabled = true;
-            this.cbxAddCondition.Location = new System.Drawing.Point(143, 161);
-            this.cbxAddCondition.Name = "cbxAddCondition";
-            this.cbxAddCondition.Size = new System.Drawing.Size(684, 20);
-            this.cbxAddCondition.TabIndex = 7;
+            this.addConditionComboBox.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
+            this.addConditionComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.addConditionComboBox.Font = new System.Drawing.Font("돋움", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
+            this.addConditionComboBox.FormattingEnabled = true;
+            this.addConditionComboBox.Location = new System.Drawing.Point(143, 161);
+            this.addConditionComboBox.Name = "addConditionComboBox";
+            this.addConditionComboBox.Size = new System.Drawing.Size(684, 20);
+            this.addConditionComboBox.TabIndex = 7;
             // 
-            // lbAddCondition
+            // addConditionLabel
             // 
-            this.lbAddCondition.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lbAddCondition.Font = new System.Drawing.Font("돋움", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
-            this.lbAddCondition.Location = new System.Drawing.Point(3, 156);
-            this.lbAddCondition.Name = "lbAddCondition";
-            this.lbAddCondition.Size = new System.Drawing.Size(134, 30);
-            this.lbAddCondition.TabIndex = 6;
-            this.lbAddCondition.Text = "조건 추가 :";
-            this.lbAddCondition.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.addConditionLabel.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.addConditionLabel.Font = new System.Drawing.Font("돋움", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
+            this.addConditionLabel.Location = new System.Drawing.Point(3, 156);
+            this.addConditionLabel.Name = "addConditionLabel";
+            this.addConditionLabel.Size = new System.Drawing.Size(134, 30);
+            this.addConditionLabel.TabIndex = 6;
+            this.addConditionLabel.Text = "조건 추가 :";
+            this.addConditionLabel.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
-            // cbxOrderBy
+            // primarySortColumnComboBox
             // 
-            this.cbxOrderBy.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
-            this.cbxOrderBy.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cbxOrderBy.Font = new System.Drawing.Font("돋움", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
-            this.cbxOrderBy.FormattingEnabled = true;
-            this.cbxOrderBy.Location = new System.Drawing.Point(143, 35);
-            this.cbxOrderBy.Name = "cbxOrderBy";
-            this.cbxOrderBy.Size = new System.Drawing.Size(684, 20);
-            this.cbxOrderBy.TabIndex = 5;
+            this.primarySortColumnComboBox.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
+            this.primarySortColumnComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.primarySortColumnComboBox.Font = new System.Drawing.Font("돋움", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
+            this.primarySortColumnComboBox.FormattingEnabled = true;
+            this.primarySortColumnComboBox.Location = new System.Drawing.Point(143, 35);
+            this.primarySortColumnComboBox.Name = "primarySortColumnComboBox";
+            this.primarySortColumnComboBox.Size = new System.Drawing.Size(684, 20);
+            this.primarySortColumnComboBox.TabIndex = 5;
             // 
-            // lbOrderBy
+            // primarySortColumnLabel
             // 
-            this.lbOrderBy.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lbOrderBy.Font = new System.Drawing.Font("돋움", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
-            this.lbOrderBy.Location = new System.Drawing.Point(3, 30);
-            this.lbOrderBy.Name = "lbOrderBy";
-            this.lbOrderBy.Size = new System.Drawing.Size(134, 30);
-            this.lbOrderBy.TabIndex = 4;
-            this.lbOrderBy.Text = "졍렬 기준 선택 :";
-            this.lbOrderBy.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.primarySortColumnLabel.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.primarySortColumnLabel.Font = new System.Drawing.Font("돋움", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
+            this.primarySortColumnLabel.Location = new System.Drawing.Point(3, 30);
+            this.primarySortColumnLabel.Name = "primarySortColumnLabel";
+            this.primarySortColumnLabel.Size = new System.Drawing.Size(134, 30);
+            this.primarySortColumnLabel.TabIndex = 4;
+            this.primarySortColumnLabel.Text = "졍렬 기준 선택 :";
+            this.primarySortColumnLabel.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
-            // lbSelectPrimaryKey
+            // primaryKeyLabel
             // 
-            this.lbSelectPrimaryKey.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lbSelectPrimaryKey.Font = new System.Drawing.Font("돋움", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
-            this.lbSelectPrimaryKey.Location = new System.Drawing.Point(3, 0);
-            this.lbSelectPrimaryKey.Name = "lbSelectPrimaryKey";
-            this.lbSelectPrimaryKey.Size = new System.Drawing.Size(134, 30);
-            this.lbSelectPrimaryKey.TabIndex = 0;
-            this.lbSelectPrimaryKey.Text = "기본키 선택 :";
-            this.lbSelectPrimaryKey.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.primaryKeyLabel.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.primaryKeyLabel.Font = new System.Drawing.Font("돋움", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
+            this.primaryKeyLabel.Location = new System.Drawing.Point(3, 0);
+            this.primaryKeyLabel.Name = "primaryKeyLabel";
+            this.primaryKeyLabel.Size = new System.Drawing.Size(134, 30);
+            this.primaryKeyLabel.TabIndex = 0;
+            this.primaryKeyLabel.Text = "기본키 선택 :";
+            this.primaryKeyLabel.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
-            // cbxPrimaryKey
+            // primaryKeyComboBox
             // 
-            this.cbxPrimaryKey.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
-            this.cbxPrimaryKey.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cbxPrimaryKey.Font = new System.Drawing.Font("돋움", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
-            this.cbxPrimaryKey.FormattingEnabled = true;
-            this.cbxPrimaryKey.Location = new System.Drawing.Point(143, 5);
-            this.cbxPrimaryKey.Name = "cbxPrimaryKey";
-            this.cbxPrimaryKey.Size = new System.Drawing.Size(684, 20);
-            this.cbxPrimaryKey.TabIndex = 1;
+            this.primaryKeyComboBox.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
+            this.primaryKeyComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.primaryKeyComboBox.Font = new System.Drawing.Font("돋움", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
+            this.primaryKeyComboBox.FormattingEnabled = true;
+            this.primaryKeyComboBox.Location = new System.Drawing.Point(143, 5);
+            this.primaryKeyComboBox.Name = "primaryKeyComboBox";
+            this.primaryKeyComboBox.Size = new System.Drawing.Size(684, 20);
+            this.primaryKeyComboBox.TabIndex = 1;
             // 
-            // btnAddCondtion
+            // addConditionButton
             // 
-            this.btnAddCondtion.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.btnAddCondtion.Image = global::ExcelConditionPainter.Properties.Resources.Add;
-            this.btnAddCondtion.Location = new System.Drawing.Point(830, 156);
-            this.btnAddCondtion.Margin = new System.Windows.Forms.Padding(0);
-            this.btnAddCondtion.Name = "btnAddCondtion";
-            this.btnAddCondtion.Size = new System.Drawing.Size(30, 30);
-            this.btnAddCondtion.TabIndex = 8;
-            this.btnAddCondtion.UseVisualStyleBackColor = true;
-            this.btnAddCondtion.Click += new System.EventHandler(this.btnAddCondtion_Click);
+            this.addConditionButton.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.addConditionButton.Image = global::ExcelConditionPainter.Properties.Resources.Add;
+            this.addConditionButton.Location = new System.Drawing.Point(830, 156);
+            this.addConditionButton.Margin = new System.Windows.Forms.Padding(0);
+            this.addConditionButton.Name = "addConditionButton";
+            this.addConditionButton.Size = new System.Drawing.Size(30, 30);
+            this.addConditionButton.TabIndex = 8;
+            this.addConditionButton.UseVisualStyleBackColor = true;
+            this.addConditionButton.Click += new System.EventHandler(this.addConditionButton_Click);
             // 
-            // vflpOptionCnt
+            // optionQuantityFlowPanel
             // 
-            this.vflpOptionCnt.AutoScroll = true;
-            this.vflpOptionCnt.AutoSize = true;
-            this.vflpOptionCnt.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.tlpMain.SetColumnSpan(this.vflpOptionCnt, 3);
-            this.vflpOptionCnt.Dock = System.Windows.Forms.DockStyle.Top;
-            this.vflpOptionCnt.FlowDirection = System.Windows.Forms.FlowDirection.TopDown;
-            this.vflpOptionCnt.Location = new System.Drawing.Point(3, 153);
-            this.vflpOptionCnt.MaximumSize = new System.Drawing.Size(0, 200);
-            this.vflpOptionCnt.Name = "vflpOptionCnt";
-            this.vflpOptionCnt.Size = new System.Drawing.Size(854, 0);
-            this.vflpOptionCnt.TabIndex = 11;
-            this.vflpOptionCnt.WrapContents = false;
+            this.optionQuantityFlowPanel.AutoScroll = true;
+            this.optionQuantityFlowPanel.AutoSize = true;
+            this.optionQuantityFlowPanel.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.mainLayoutPanel.SetColumnSpan(this.optionQuantityFlowPanel, 3);
+            this.optionQuantityFlowPanel.Dock = System.Windows.Forms.DockStyle.Top;
+            this.optionQuantityFlowPanel.FlowDirection = System.Windows.Forms.FlowDirection.TopDown;
+            this.optionQuantityFlowPanel.Location = new System.Drawing.Point(3, 153);
+            this.optionQuantityFlowPanel.MaximumSize = new System.Drawing.Size(0, 200);
+            this.optionQuantityFlowPanel.Name = "optionQuantityFlowPanel";
+            this.optionQuantityFlowPanel.Size = new System.Drawing.Size(854, 0);
+            this.optionQuantityFlowPanel.TabIndex = 11;
+            this.optionQuantityFlowPanel.WrapContents = false;
             // 
-            // pnBottom
+            // bottomPanel
             // 
-            this.tlpMain.SetColumnSpan(this.pnBottom, 3);
-            this.pnBottom.Controls.Add(this.btnSet);
-            this.pnBottom.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.pnBottom.Location = new System.Drawing.Point(3, 339);
-            this.pnBottom.Name = "pnBottom";
-            this.pnBottom.Size = new System.Drawing.Size(854, 47);
-            this.pnBottom.TabIndex = 14;
+            this.mainLayoutPanel.SetColumnSpan(this.bottomPanel, 3);
+            this.bottomPanel.Controls.Add(this.setButton);
+            this.bottomPanel.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.bottomPanel.Location = new System.Drawing.Point(3, 339);
+            this.bottomPanel.Name = "bottomPanel";
+            this.bottomPanel.Size = new System.Drawing.Size(854, 47);
+            this.bottomPanel.TabIndex = 14;
             // 
-            // btnSet
+            // setButton
             // 
-            this.btnSet.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.btnSet.Location = new System.Drawing.Point(0, 0);
-            this.btnSet.Name = "btnSet";
-            this.btnSet.Size = new System.Drawing.Size(854, 47);
-            this.btnSet.TabIndex = 0;
-            this.btnSet.Text = "Set";
-            this.btnSet.UseVisualStyleBackColor = true;
-            this.btnSet.Click += new System.EventHandler(this.btnSet_Click);
+            this.setButton.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.setButton.Location = new System.Drawing.Point(0, 0);
+            this.setButton.Name = "setButton";
+            this.setButton.Size = new System.Drawing.Size(854, 47);
+            this.setButton.TabIndex = 0;
+            this.setButton.Text = "Set";
+            this.setButton.UseVisualStyleBackColor = true;
+            this.setButton.Click += new System.EventHandler(this.setButton_Click);
             // 
             // FormSetConditions
             // 
@@ -349,7 +349,7 @@
             this.AutoSize = true;
             this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.ClientSize = new System.Drawing.Size(860, 389);
-            this.Controls.Add(this.tlpMain);
+            this.Controls.Add(this.mainLayoutPanel);
             this.Font = new System.Drawing.Font("돋움", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
             this.MaximizeBox = false;
             this.MinimizeBox = false;
@@ -357,10 +357,10 @@
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "FormSetConditions";
             this.TopMost = true;
-            this.tlpMain.ResumeLayout(false);
-            this.tlpMain.PerformLayout();
-            this.vflpCondition.ResumeLayout(false);
-            this.pnBottom.ResumeLayout(false);
+            this.mainLayoutPanel.ResumeLayout(false);
+            this.mainLayoutPanel.PerformLayout();
+            this.conditionFlowPanel.ResumeLayout(false);
+            this.bottomPanel.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -368,27 +368,27 @@
 
         #endregion
 
-        private System.Windows.Forms.TableLayoutPanel tlpMain;
-        private System.Windows.Forms.Label lbSelectPrimaryKey;
-        private System.Windows.Forms.Label lbOrderBy;
-        private System.Windows.Forms.ComboBox cbxOrderBy;
-        private System.Windows.Forms.ComboBox cbxPrimaryKey;
-        private System.Windows.Forms.ComboBox cbxAddCondition;
-        private System.Windows.Forms.Label lbAddCondition;
-        private System.Windows.Forms.Button btnAddCondtion;
-        private System.Windows.Forms.ComboBox cbxGoodsOptionCol;
-        private System.Windows.Forms.Label lbGoodsOptionCol;
-        private GDombo_CustomControl.VerticalFlowLayoutPanel vflpOptionCnt;
-        private System.Windows.Forms.Label lbBuyCntCol;
-        private System.Windows.Forms.ComboBox cbxBuyCntCol;
-        private GDombo_CustomControl.VerticalFlowLayoutPanel vflpCondition;
-        private ucConditionOrderExceptDuplication ucConditionOrder1;
-        private ucConditionQuantity ucConditionCount1;
-        private ucConditionQuantity ucConditionCount2;
-        private System.Windows.Forms.Panel pnBottom;
-        private System.Windows.Forms.Button btnSet;
-        private ucConditionDuplicate ucConditionDuplicate1;
-        private System.Windows.Forms.ComboBox cbxOrderBy2;
-        private System.Windows.Forms.Label lbOrderBy2;
+        private System.Windows.Forms.TableLayoutPanel mainLayoutPanel;
+        private System.Windows.Forms.Label primaryKeyLabel;
+        private System.Windows.Forms.Label primarySortColumnLabel;
+        private System.Windows.Forms.ComboBox primarySortColumnComboBox;
+        private System.Windows.Forms.ComboBox primaryKeyComboBox;
+        private System.Windows.Forms.ComboBox addConditionComboBox;
+        private System.Windows.Forms.Label addConditionLabel;
+        private System.Windows.Forms.Button addConditionButton;
+        private System.Windows.Forms.ComboBox goodsOptionColumnComboBox;
+        private System.Windows.Forms.Label goodsOptionColumnLabel;
+        private GDombo_CustomControl.VerticalFlowLayoutPanel optionQuantityFlowPanel;
+        private System.Windows.Forms.Label buyCountColumnLabel;
+        private System.Windows.Forms.ComboBox buyCountColumnComboBox;
+        private GDombo_CustomControl.VerticalFlowLayoutPanel conditionFlowPanel;
+        private DistinctOrderConditionControl distinctOrderConditionControl;
+        private QuantityConditionControl primaryQuantityConditionControl;
+        private QuantityConditionControl secondaryQuantityConditionControl;
+        private System.Windows.Forms.Panel bottomPanel;
+        private System.Windows.Forms.Button setButton;
+        private DuplicateConditionControl duplicateConditionControl;
+        private System.Windows.Forms.ComboBox secondarySortColumnComboBox;
+        private System.Windows.Forms.Label secondarySortColumnLabel;
     }
 }
