@@ -1,59 +1,86 @@
 using System;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.Data;
 using System.Drawing;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace ExcelConditionPainter
 {
-    public partial class DistinctOrderConditionControl : UserControl, IConditionRule
+    /// <summary>
+    /// 중복 제외 순서 조건의 UI 입력을 받고 계산 Rule을 생성하는 컨트롤입니다.
+    /// </summary>
+    public partial class DistinctOrderConditionControl : UserControl, IConditionControl
     {
-        public int AppliedConditionIndex { get; set; }
+        /// <summary>
+        /// 중복 제외 순서 조건 컨트롤을 초기화합니다.
+        /// </summary>
         public DistinctOrderConditionControl()
         {
             InitializeComponent();
         }
+
+        /// <summary>
+        /// 선택 가능한 컬럼과 행 수를 받아 컨트롤을 초기화합니다.
+        /// </summary>
         public DistinctOrderConditionControl(string[] columnNames, int rowCount) : this()
         {
             SetSelectableItems(columnNames, rowCount);
         }
+
+        /// <summary>
+        /// 순서 그룹을 만들 컬럼 선택 목록과 인원 제한 범위를 설정합니다.
+        /// </summary>
         public void SetSelectableItems(string[] columnNames, int rowCount)
         {
             selectableColumnsComboBox.ItemClear();
-            selectableColumnsComboBox.AddItemRange(columnNames);
-            CheckBox checkBox = selectableColumnsComboBox.GetItems.FirstOrDefault(CheckBox => CheckBox.Text.Contains("주소"));
+            selectableColumnsComboBox.AddItemRange(columnNames ?? new string[0]);
+
+            // 주소 컬럼이 있으면 기본 선택합니다.
+            CheckBox checkBox = selectableColumnsComboBox.GetItems.FirstOrDefault(item => item.Text.Contains("주소"));
             if (checkBox != null)
                 checkBox.Checked = true;
+
             peopleLimitInput.Maximum = rowCount;
         }
-        #region UI
+
+        /// <summary>
+        /// 현재 UI 입력값으로 중복 제외 순서 조건 Rule을 생성합니다.
+        /// </summary>
+        public IConditionRule CreateRule()
+        {
+            return new DistinctOrderConditionRule(PriorityLevel, PaintTarget, SelectedColor, GetSelectedColumnNames(), PeopleLimit);
+        }
+
         [Category("Action")]
         [Description("Put PriorityLevel between 0~10")]
+        // 조건 우선순위입니다.
         public int PriorityLevel
         {
             get { return conditionCommonControl.PriorityLevel; }
             set { conditionCommonControl.PriorityLevel = value; }
         }
+
         [Category("Action")]
         [Description("Put Type of Painting Color")]
+        // 글자색/배경색 중 적용할 대상입니다.
         public PaintTarget PaintTarget
         {
             get { return conditionCommonControl.PaintTarget; }
             set { conditionCommonControl.PaintTarget = value; }
         }
+
         [Category("Action")]
         [Description("Put Color to Paint")]
+        // 조건에 적용할 색상입니다.
         public Color SelectedColor
         {
             get { return conditionCommonControl.SelectedColor; }
-            set { conditionCommonControl.SelectedColor = SelectedColor; }
+            set { conditionCommonControl.SelectedColor = value; }
         }
+
         [Category("Action")]
         [Description("Put Goods Count")]
+        // 조건을 적용할 최대 인원 수입니다.
         public int PeopleLimit
         {
             get { return (int)peopleLimitInput.Value; }
@@ -64,56 +91,24 @@ namespace ExcelConditionPainter
                 peopleLimitInput.Value = value;
             }
         }
+
+        /// <summary>
+        /// 체크된 컬럼명만 Rule 생성용으로 반환합니다.
+        /// </summary>
+        private string[] GetSelectedColumnNames()
+        {
+            return selectableColumnsComboBox.GetItems
+                .Where(item => item.Checked)
+                .Select(item => item.Text)
+                .ToArray();
+        }
+
+        /// <summary>
+        /// 삭제 버튼 클릭 시 현재 조건 컨트롤을 화면에서 제거합니다.
+        /// </summary>
         private void conditionCommonControl_DeleteButtonClick(object sender, EventArgs e)
         {
             Parent.Controls.Remove(this);
         }
-        #endregion
-        public bool Evaluate(ConditionEvaluationContext conditionContext)
-        {
-            string[] selectedColumnNames = selectableColumnsComboBox.GetItems.Where(CheckBox => CheckBox.Checked).Select(CheckBox => CheckBox.Text).ToArray();
-            if (selectedColumnNames.Length == 0)
-                return false;
-            string primaryColumnName = conditionContext.PrimaryColumnName;
-            string optionColumnName = conditionContext.OptionColumnName;
-            DataTable dataTable = conditionContext.ConditionTable;
-
-            // 그룹화 결과를 저장할 Dictionary Key
-            string selectedColumnsKey = string.Join("|", selectedColumnNames);
-            if(conditionContext.DistinctOrderCalculationsBySelection.TryGetValue(selectedColumnsKey, out Dictionary<string, DistinctOrderConditionCalculation> distinctOrderCalculations) == false)
-            {
-                // 한번도 계산한게 없을때 계산 1회 실행 
-                distinctOrderCalculations = new Dictionary<string, DistinctOrderConditionCalculation>();
-                conditionContext.DistinctOrderCalculationsBySelection[selectedColumnsKey] = distinctOrderCalculations;
-                for (int i = 0; i < dataTable.Rows.Count; i++)
-                {
-                    DataRow dataRow = dataTable.Rows[i];
-                    string groupKey = string.Join("|", selectedColumnNames.Select(col => dataRow[col]));
-
-                    string primaryValue = dataRow[primaryColumnName].ToString();
-                    if (distinctOrderCalculations.TryGetValue(groupKey, out DistinctOrderConditionCalculation distinctOrderCalculation))
-                        distinctOrderCalculation.AddAdditionalData(primaryValue);
-                    else
-                        distinctOrderCalculations[groupKey] = new DistinctOrderConditionCalculation(primaryValue);
-                }
-            }
-            int peopleCount = 1;
-            foreach (DistinctOrderConditionCalculation distinctOrderCalculation in distinctOrderCalculations.Values)
-            {
-                if (conditionContext.TryAddCondition(distinctOrderCalculation.FirstRowPrimaryValue, this) == false)
-                    continue;
-                if (++peopleCount > PeopleLimit)
-                    break;
-            }
-            return peopleCount > 1;
-        }
-        public void PaintRow(DataGridViewRow row)
-        {
-            if (PaintTarget == PaintTarget.Font)// 글씨 색 변경
-                row.DefaultCellStyle.ForeColor = SelectedColor;
-            else // 배경색 변경
-                row.DefaultCellStyle.BackColor = SelectedColor;
-        }
-        
     }
 }

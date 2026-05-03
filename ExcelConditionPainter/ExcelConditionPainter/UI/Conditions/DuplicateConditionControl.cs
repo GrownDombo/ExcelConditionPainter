@@ -1,118 +1,98 @@
 using System;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.Data;
 using System.Drawing;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace ExcelConditionPainter
 {
-    public partial class DuplicateConditionControl : UserControl, IConditionRule
+    /// <summary>
+    /// 중복값 조건의 UI 입력을 받고 계산 Rule을 생성하는 컨트롤입니다.
+    /// </summary>
+    public partial class DuplicateConditionControl : UserControl, IConditionControl
     {
-        public int AppliedConditionIndex { get; set; }
+        /// <summary>
+        /// 중복 조건 컨트롤을 초기화합니다.
+        /// </summary>
         public DuplicateConditionControl()
         {
             InitializeComponent();
         }
+
+        /// <summary>
+        /// 선택 가능한 컬럼과 행 수를 받아 중복 조건 컨트롤을 초기화합니다.
+        /// </summary>
         public DuplicateConditionControl(string[] columnNames, int rowCount) : this()
         {
             SetSelectableItems(columnNames, rowCount);
         }
+
+        /// <summary>
+        /// 중복 판단에 사용할 컬럼 선택 목록을 설정합니다.
+        /// </summary>
         public void SetSelectableItems(string[] columnNames, int rowCount)
         {
             selectableColumnsComboBox.ItemClear();
-            selectableColumnsComboBox.AddItemRange(columnNames);
-            CheckBox checkBox = selectableColumnsComboBox.GetItems.FirstOrDefault(CheckBox => CheckBox.Text.Contains("주소"));
+            selectableColumnsComboBox.AddItemRange(columnNames ?? new string[0]);
+
+            // 주소 컬럼이 있으면 기본 선택합니다.
+            CheckBox checkBox = selectableColumnsComboBox.GetItems.FirstOrDefault(item => item.Text.Contains("주소"));
             if (checkBox != null)
                 checkBox.Checked = true;
-            // 이 조건은 rowCount 사용하지 않는다
         }
-        #region UI
+
+        /// <summary>
+        /// 현재 UI 입력값으로 중복 조건 Rule을 생성합니다.
+        /// </summary>
+        public IConditionRule CreateRule()
+        {
+            return new DuplicateConditionRule(PriorityLevel, PaintTarget, SelectedColor, GetSelectedColumnNames());
+        }
+
         [Category("Action")]
         [Description("Put PriorityLevel between 0~10")]
+        // 조건 우선순위입니다.
         public int PriorityLevel
         {
             get { return conditionCommonControl.PriorityLevel; }
             set { conditionCommonControl.PriorityLevel = value; }
         }
+
         [Category("Action")]
         [Description("Put Type of Painting Color")]
+        // 글자색/배경색 중 적용할 대상입니다.
         public PaintTarget PaintTarget
         {
             get { return conditionCommonControl.PaintTarget; }
             set { conditionCommonControl.PaintTarget = value; }
         }
+
         [Category("Action")]
         [Description("Put Color to Paint")]
+        // 조건에 적용할 색상입니다.
         public Color SelectedColor
         {
             get { return conditionCommonControl.SelectedColor; }
-            set { conditionCommonControl.SelectedColor = SelectedColor; }
+            set { conditionCommonControl.SelectedColor = value; }
         }
+
+        /// <summary>
+        /// 체크된 컬럼명만 Rule 생성용으로 반환합니다.
+        /// </summary>
+        private string[] GetSelectedColumnNames()
+        {
+            return selectableColumnsComboBox.GetItems
+                .Where(item => item.Checked)
+                .Select(item => item.Text)
+                .ToArray();
+        }
+
+        /// <summary>
+        /// 삭제 버튼 클릭 시 현재 조건 컨트롤을 화면에서 제거합니다.
+        /// </summary>
         private void conditionCommonControl_DeleteButtonClick(object sender, EventArgs e)
         {
             Parent.Controls.Remove(this);
-        }
-        #endregion
-        public bool Evaluate(ConditionEvaluationContext conditionContext)
-        {
-            string[] selectedColumnNames = selectableColumnsComboBox.GetItems.Where(CheckBox => CheckBox.Checked).Select(CheckBox => CheckBox.Text).ToArray();
-            if (selectedColumnNames.Length == 0)
-                return false;
-
-            string primaryColumnName = conditionContext.PrimaryColumnName;
-            DataTable dataTable = conditionContext.ConditionTable;
-
-            Dictionary<string, List<DataRow>> groupedResults = new Dictionary<string, List<DataRow>>();
-            for (int i = 0; i < dataTable.Rows.Count; i++)
-            {
-                DataRow dataRow = dataTable.Rows[i];
-                string groupKey = string.Join("|", selectedColumnNames.Select(col => dataRow[col].ToString()));
-                if (groupedResults.TryGetValue(groupKey, out List<DataRow> matchingRows) == false)
-                {
-                    matchingRows = new List<DataRow>();
-                    groupedResults[groupKey] = matchingRows;
-                }
-                matchingRows.Add(dataRow);
-            }
-            foreach (List<DataRow> rows in groupedResults.Values)
-            {
-                if (rows.Count <= 1)
-                    continue; // 중복이 아니면 패스
-                for (int i = 0; i < rows.Count; i++)
-                {
-                    DataRow row = rows[i];
-                    string primaryValue = row[primaryColumnName].ToString();
-                    if (conditionContext.TryAddCondition(primaryValue, this) == false)
-                        continue;
-                }
-            }
-            return true;
-        }
-        public void PaintRow(DataGridViewRow row)
-        {
-            string[] selectedColumnNames = selectableColumnsComboBox.GetItems.Where(CheckBox => CheckBox.Checked).Select(CheckBox => CheckBox.Text).ToArray();
-            Action<DataGridViewCell, Color> applyCellColor;
-            if (PaintTarget == PaintTarget.Font)
-                applyCellColor = ApplyFontColor;// 글씨 색 변경
-            else
-                applyCellColor = ApplyBackColor;// 배경색 변경
-            for (int columnIndex = 0; columnIndex < selectedColumnNames.Length; columnIndex++)
-            {
-                string columnName = selectedColumnNames[columnIndex];
-                applyCellColor(row.Cells[columnName], SelectedColor);
-            }
-        }
-        private void ApplyFontColor(DataGridViewCell cell, Color color)
-        {
-            cell.Style.ForeColor = color;
-        }
-        private void ApplyBackColor(DataGridViewCell cell, Color color)
-        {
-            cell.Style.BackColor = color;
         }
     }
 }

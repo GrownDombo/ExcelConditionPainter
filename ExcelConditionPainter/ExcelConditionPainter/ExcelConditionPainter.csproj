@@ -91,6 +91,8 @@
     <Compile Include="ClassStatic\AppOptions.cs" />
     <Compile Include="Class\ConditionGroupCalculation.cs" />
     <Compile Include="Class\ConditionEvaluationContext.cs" />
+    <Compile Include="Class\ConditionPaintInstruction.cs" />
+    <Compile Include="Class\ConditionRules.cs" />
     <Compile Include="Extensions.cs" />
     <Compile Include="FormMain.cs">
       <SubType>Form</SubType>
@@ -101,6 +103,11 @@
     <Compile Include="Interface\Conditions.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Services\ConditionEvaluationService.cs" />
+    <Compile Include="Services\ExcelExportResult.cs" />
+    <Compile Include="Services\ExcelWorkbookService.cs" />
+    <Compile Include="Services\GridPainter.cs" />
+    <Compile Include="UI\Conditions\ConditionControlFactory.cs" />
     <Compile Include="UI\Conditions\Common\ConditionCommonControl.cs">
       <SubType>UserControl</SubType>
     </Compile>

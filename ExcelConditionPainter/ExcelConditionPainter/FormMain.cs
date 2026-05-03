@@ -1,7 +1,4 @@
-using ClosedXML.Excel;
 using System;
-using System.Collections.Generic;
-using System.Data;
 using System.Diagnostics;
 using System.Drawing;
 using System.IO;
@@ -9,49 +6,44 @@ using System.Windows.Forms;
 
 namespace ExcelConditionPainter
 {
+    /// <summary>
+    /// 메인 화면에서 파일 열기, 조건 설정, 검색, Export 흐름을 제어합니다.
+    /// </summary>
     public partial class FormMain : Form
     {
-        private const string FirstSheetName = "ExportedData";
-        private readonly FormSearch searchForm; // FormSearch를 필드로 선언
+        // 환경설정 창 인스턴스입니다.
         private readonly FormOptions optionsForm;
+        // Excel 읽기/쓰기 처리를 담당하는 서비스입니다.
+        private readonly ExcelWorkbookService excelWorkbookService;
+        // 조건 평가 결과를 그리드에 색칠하는 서비스입니다.
+        private readonly GridPainter gridPainter;
 
+        // Ctrl+F로 열 검색창입니다.
+        private FormSearch searchForm;
+        // 현재 열려 있는 원본 Excel 파일 경로입니다.
         private string sourceFilePath;
+        // 마지막으로 적용된 조건 평가 결과입니다.
         private ConditionEvaluationContext conditionContext;
+
+        /// <summary>
+        /// 메인 폼과 필요한 서비스/보조 창을 초기화합니다.
+        /// </summary>
         public FormMain()
         {
             InitializeComponent();
-            searchForm = new FormSearch(mainGridView);
-            searchForm.Owner = this; // FormSearch의 소유자를 현재 폼으로 설정
+
             optionsForm = new FormOptions();
             optionsForm.Owner = this;
+            excelWorkbookService = new ExcelWorkbookService();
+            gridPainter = new GridPainter();
 
             sourceFilePath = string.Empty;
             conditionContext = null;
         }
-        private DataTable LoadFileToDataTable(string fileFullPath)
-        {
-            string tableName = Path.GetFileNameWithoutExtension(fileFullPath);
-            DataTable table = new DataTable(tableName);
-            using (XLWorkbook workbook = new XLWorkbook(fileFullPath))
-            {
-                IXLWorksheet worksheet = workbook.Worksheet(1);// 첫 번째 시트를 가져옴
-                int firstColIndex = worksheet.FirstColumnUsed().ColumnNumber(); // 첫 번째로 비어있지 않은 열의 번호
-                int firstRowIndex = worksheet.FirstRowUsed().RowNumber();       // 첫 번째로 비어있지 않은 행의 번호
-                int lastColIndex = worksheet.LastColumnUsed().ColumnNumber();   // 마지막 번째로 비어있지 않은 열의 번호
-                int lastRowIndex = worksheet.LastRowUsed().RowNumber();         // 마지막 번째로 비어있지 않은 행의 번호
 
-                for (int col = firstColIndex; col <= lastColIndex; col++)
-                    table.Columns.Add(worksheet.Cell(firstRowIndex, col).GetString());
-                for (int row = firstRowIndex + 1; row <= lastRowIndex; row++)               // 데이터를 DataTable에 추가
-                {
-                    DataRow dataRow = table.NewRow();
-                    for (int col = firstColIndex; col <= lastColIndex; col++)
-                        dataRow[col - firstColIndex] = worksheet.Cell(row, col).GetString();  // 셀 값을 DataTable에 추가
-                    table.Rows.Add(dataRow);
-                }
-            }
-            return table;
-        }
+        /// <summary>
+        /// Excel 파일을 열고 조건 설정 창을 통해 조건 색칠을 적용합니다.
+        /// </summary>
         private void openMenuItem_Click(object sender, EventArgs e)
         {
             using (OpenFileDialog openFileDialog = new OpenFileDialog())
@@ -62,11 +54,14 @@ namespace ExcelConditionPainter
                 openFileDialog.Multiselect = false;
                 if (openFileDialog.ShowDialog() != DialogResult.OK)
                     return;
+
                 sourceFilePath = openFileDialog.FileName;
             }
 
+            // 파일이 실제로 존재하지 않으면 열기 흐름을 중단합니다.
             if (File.Exists(sourceFilePath) == false)
                 return;
+
             switch (Path.GetExtension(sourceFilePath))
             {
                 case ".xlsx":
@@ -76,43 +71,77 @@ namespace ExcelConditionPainter
                     MessageBox.Show("지원하지 않는 파일 형식입니다.");
                     return;
             }
-            this.Text = $"Condition Excel Painter - {sourceFilePath}";
-            mainGridView.DataSource = LoadFileToDataTable(sourceFilePath);
+
+            Text = $"Condition Excel Painter - {sourceFilePath}";
+            mainGridView.DataSource = excelWorkbookService.LoadFileToDataTable(sourceFilePath);
+
             using (FormSetConditions formDataDetails = new FormSetConditions(mainGridView))
             {
                 formDataDetails.Owner = this;
                 formDataDetails.ShowDialog();
-                conditionContext = formDataDetails.ConditionContext; // conditionContext 가 null이면 안됨
+                // 조건 설정 창에서 계산된 조건 평가 결과입니다.
+                conditionContext = formDataDetails.ConditionContext;
                 if (conditionContext is null)
                     return;
-                conditionContext.PaintDataGridView(mainGridView);// 조건 계산 후 테이블 업데이트
+
+                try
+                {
+                    gridPainter.Paint(mainGridView, conditionContext);
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
             }
         }
+
+        /// <summary>
+        /// 도움말 웹 페이지를 엽니다.
+        /// </summary>
         private void helpMenuItem_Click(object sender, EventArgs e)
         {
             Process.Start("https://growndombo.tistory.com/7");
         }
+
+        /// <summary>
+        /// 설정 창을 엽니다.
+        /// </summary>
         private void optionsMenuItem_Click(object sender, EventArgs e)
         {
             optionsForm.ShowDialog();
         }
+
+        /// <summary>
+        /// 바인딩 완료 후 사용자가 컬럼 정렬을 바꾸지 못하도록 막습니다.
+        /// </summary>
         private void mainGridView_DataBindingComplete(object sender, DataGridViewBindingCompleteEventArgs e)
         {
             foreach (DataGridViewColumn col in mainGridView.Columns)
                 col.SortMode = DataGridViewColumnSortMode.NotSortable;
         }
+
+        /// <summary>
+        /// 그리드 행 머리글에 1부터 시작하는 행 번호를 그립니다.
+        /// </summary>
         private void mainGridView_RowPostPaint(object sender, DataGridViewRowPostPaintEventArgs e)
         {
-            string rowIndex = (e.RowIndex + 1).ToString(); // 1부터 시작하는 행 번호
+            // 화면에 표시할 행 번호입니다.
+            string rowIndex = (e.RowIndex + 1).ToString();
+            // 행 번호를 가운데 정렬하기 위한 서식입니다.
             StringFormat centerFormat = new StringFormat()
             {
                 Alignment = StringAlignment.Center,
                 LineAlignment = StringAlignment.Center
             };
-            // RowHeader에 행 번호 그리기
+
+            // 행 번호를 그릴 RowHeader 영역입니다.
             Rectangle headerBounds = new Rectangle(e.RowBounds.Left, e.RowBounds.Top, mainGridView.RowHeadersWidth, e.RowBounds.Height);
             e.Graphics.DrawString(rowIndex, mainGridView.Font, SystemBrushes.ControlText, headerBounds, centerFormat);
         }
+
+        /// <summary>
+        /// 현재 그리드 내용을 Excel 파일로 Export합니다.
+        /// </summary>
         private void exportButton_Click(object sender, EventArgs e)
         {
             if (string.IsNullOrEmpty(sourceFilePath))
@@ -120,154 +149,58 @@ namespace ExcelConditionPainter
                 MessageBox.Show($"Path Error : {sourceFilePath}", "오류", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
+
             if (conditionContext is null)
             {
                 MessageBox.Show("Condition Set Error", "오류", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
+
             try
             {
-                string exportDirectory = Path.Combine(Path.GetDirectoryName(sourceFilePath), "ExcelPainter");
-                Directory.CreateDirectory(exportDirectory); // 이미 존재하면 아무 일도 안 함
+                // Export 후 사용자가 열어볼 경로 정보입니다.
+                ExcelExportResult exportResult = excelWorkbookService.ExportGrid(mainGridView, sourceFilePath, conditionContext);
 
-                string fileName = Path.GetFileNameWithoutExtension(sourceFilePath);
-                string extension = Path.GetExtension(sourceFilePath);
-                string exportDefaultFilePath = Path.Combine(exportDirectory, $"{fileName}_Default{extension}");
-
-                // DataGridView 데이터를 Excel로 그대로 출력
-                using (XLWorkbook workbook = CreateDefaultWorkbook(out IXLWorksheet worksheet))
-                {
-                    for (int rowIndex = 0; rowIndex < mainGridView.Rows.Count; rowIndex++)
-                    {
-                        DataGridViewRow row = mainGridView.Rows[rowIndex];
-                        AddRow(row, ref worksheet);
-                    }
-                    SaveWorkbook(workbook, exportDefaultFilePath);
-                }
-                // 옵션 1 조결별 출력
-                if (AppOptions.ExportSplitByConditions)
-                {
-                    DataTable dataTable = mainGridView.DataSource as DataTable;
-                    Dictionary<int, XLWorkbook> workbooksByConditionIndex = new Dictionary<int, XLWorkbook>();
-                    for (int rowIndex = 0; rowIndex < dataTable.Rows.Count; rowIndex++)
-                    {
-                        DataRow row = dataTable.Rows[rowIndex];
-                        string primaryKey = row[row.Table.PrimaryKey[0]].ToString(); // 키가 1개라고 가정하기 때문에 가능
-                        if (conditionContext.ConditionsByPrimaryValue.TryGetValue(primaryKey, out List<IConditionRule> conditionRules))
-                        {
-                            for (int conditionIndex = 0; conditionIndex < conditionRules.Count; conditionIndex++)
-                            {
-                                IConditionRule conditionRule = conditionRules[conditionIndex];
-                                int appliedConditionIndex = conditionRule.AppliedConditionIndex;
-                                IXLWorksheet worksheet;
-                                if (workbooksByConditionIndex.TryGetValue(appliedConditionIndex, out XLWorkbook workbook))
-                                    worksheet = workbook.Worksheets.Worksheet(FirstSheetName);
-                                else
-                                {
-                                    workbook = CreateDefaultWorkbook(out worksheet);
-                                    workbooksByConditionIndex[appliedConditionIndex] = workbook;
-                                }
-                                AddRow(mainGridView.Rows[rowIndex], ref worksheet);
-                            }
-                        }
-                    }
-                    foreach (KeyValuePair<int, XLWorkbook> workbookEntry in workbooksByConditionIndex)
-                    {
-                        int appliedConditionIndex = workbookEntry.Key;
-                        XLWorkbook workbook = workbookEntry.Value;
-                        string conditionFilePath = Path.Combine(exportDirectory, $"{fileName}_{appliedConditionIndex}{extension}");
-                        SaveWorkbook(workbook, conditionFilePath);
-                        workbook.Dispose();
-                    }
-                    Process.Start(exportDirectory);
-                }
-                else
-                    Process.Start(exportDefaultFilePath);
+                Process.Start(exportResult.OpenTargetPath);
             }
             catch (Exception ex)
             {
                 MessageBox.Show($"에러 {ex}", "오류", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-        private XLWorkbook CreateDefaultWorkbook(out IXLWorksheet worksheet)
-        {
-            XLWorkbook workbook = new XLWorkbook();
-            worksheet = workbook.Worksheets.Add(FirstSheetName);
-            // DataGridView 헤더를 Excel로 복사
-            for (int col = 0; col < mainGridView.Columns.Count; col++)
-                worksheet.Cell(1, col + 1).Value = mainGridView.Columns[col].HeaderText; // 헤더
-            IXLRange headerRange = worksheet.Range(1, 1, 1, mainGridView.Columns.Count);
-            headerRange.Style.Font.Bold = true;
-            return workbook;
-        }
-        private void AddRow(DataGridViewRow row, ref IXLWorksheet worksheet)
-        {
-            int excelRow = (worksheet.LastRowUsed()?.RowNumber() ?? 0) + 1;
 
-            // 행/셀 스타일 캐시
-            Color rowBackColor = row.DefaultCellStyle.BackColor;
-            Color rowForeColor = row.DefaultCellStyle.ForeColor;
-
-            int colCount = row.DataGridView?.Columns.Count ?? row.Cells.Count;
-
-            for (int columnIndex = 0; columnIndex < colCount; columnIndex++)
-            {
-                DataGridViewCell cell = row.Cells[columnIndex];
-                IXLCell excelCell = worksheet.Cell(excelRow, 1 + columnIndex);
-
-                // 값 설정 (숫자는 숫자로, 아니면 문자열)
-                object val = cell.Value;
-                if (val != null)
-                {
-                    string valueText = val.ToString();
-                    if (double.TryParse(valueText, out double d))
-                    {
-                        excelCell.Value = d;
-                        excelCell.Style.NumberFormat.Format = "0";
-                    }
-                    else
-                        excelCell.Value = valueText;
-                }
-                else
-                {
-                    excelCell.Clear();
-                }
-                // ----- 스타일 적용 순서: Row 기본 → Cell 개별 -----
-                if (rowBackColor != Color.Empty)
-                    excelCell.Style.Fill.BackgroundColor = XLColor.FromColor(rowBackColor);
-                if (rowForeColor != Color.Empty)
-                    excelCell.Style.Font.FontColor = XLColor.FromColor(rowForeColor);
-
-                Color cellBack = cell.Style.BackColor;
-                Color cellFore = cell.Style.ForeColor;
-
-                if (cellBack != Color.Empty)
-                    excelCell.Style.Fill.BackgroundColor = XLColor.FromColor(cellBack);
-                if (cellFore != Color.Empty)
-                    excelCell.Style.Font.FontColor = XLColor.FromColor(cellFore);
-            }
-        }
-        private void SaveWorkbook(XLWorkbook workbook, string targetFilePath)
-        {
-            IXLWorksheet worksheet = workbook.Worksheets.Worksheet(FirstSheetName);
-            worksheet.Columns().AdjustToContents();
-            IXLRange usedRange = worksheet.RangeUsed();
-            usedRange.Style.Border.OutsideBorder = XLBorderStyleValues.Thin;
-            usedRange.Style.Border.InsideBorder = XLBorderStyleValues.Thin;
-            // Excel 파일 저장
-            workbook.SaveAs(targetFilePath);
-        }
+        /// <summary>
+        /// Ctrl+F 단축키로 검색창을 열거나 이미 열린 검색창에 포커스를 줍니다.
+        /// </summary>
         protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
         {
-            if (keyData == (Keys.Control | Keys.F)) // Control + F 키 조합 확인
+            if (keyData == (Keys.Control | Keys.F))
             {
-                if (searchForm.Visible) // FormSearch가 보이지 않는 경우
-                    searchForm.Focus(); // 이미 열려 있는 경우 포커스 설정
+                // 현재 사용할 검색창 인스턴스입니다.
+                FormSearch currentSearchForm = GetSearchForm();
+                if (currentSearchForm.Visible)
+                    currentSearchForm.Focus();
                 else
-                    searchForm.Show(); // FormSearch 창 열기
-                return true; // 키 이벤트 처리 완료
+                    currentSearchForm.Show();
+
+                return true;
             }
-            return base.ProcessCmdKey(ref msg, keyData); // 기본 처리
+
+            return base.ProcessCmdKey(ref msg, keyData);
+        }
+
+        /// <summary>
+        /// 닫혀서 Dispose된 검색창은 새로 만들고, 살아있는 검색창은 재사용합니다.
+        /// </summary>
+        private FormSearch GetSearchForm()
+        {
+            if (searchForm == null || searchForm.IsDisposed)
+            {
+                searchForm = new FormSearch(mainGridView);
+                searchForm.Owner = this;
+            }
+
+            return searchForm;
         }
     }
 }

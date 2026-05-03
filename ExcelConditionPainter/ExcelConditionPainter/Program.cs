@@ -1,11 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using System;
 using System.Windows.Forms;
 
 namespace ExcelConditionPainter
 {
+    /// <summary>
+    /// 애플리케이션 시작 지점입니다.
+    /// </summary>
     internal static class Program
     {
         /// <summary>

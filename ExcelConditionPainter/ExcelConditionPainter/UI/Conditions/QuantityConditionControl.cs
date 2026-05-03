@@ -1,58 +1,86 @@
 using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.Data;
 using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
 
 namespace ExcelConditionPainter
 {
-    public partial class QuantityConditionControl : UserControl, IConditionRule
+    /// <summary>
+    /// 구매 수량 조건의 UI 입력을 받고 계산 Rule을 생성하는 컨트롤입니다.
+    /// </summary>
+    public partial class QuantityConditionControl : UserControl, IConditionControl
     {
-        public int AppliedConditionIndex { get; set; }
+        /// <summary>
+        /// 수량 조건 컨트롤을 초기화합니다.
+        /// </summary>
         public QuantityConditionControl()
         {
             InitializeComponent();
         }
+
+        /// <summary>
+        /// 선택 가능한 컬럼과 행 수를 받아 수량 조건 컨트롤을 초기화합니다.
+        /// </summary>
         public QuantityConditionControl(string[] columnNames, int rowCount) : this()
         {
             SetSelectableItems(columnNames, rowCount);
         }
+
+        /// <summary>
+        /// 수량 그룹을 만들 컬럼 선택 목록과 인원 제한 범위를 설정합니다.
+        /// </summary>
         public void SetSelectableItems(string[] columnNames, int rowCount)
         {
             selectableColumnsComboBox.ItemClear();
-            selectableColumnsComboBox.AddItemRange(columnNames);
-            CheckBox checkBox = selectableColumnsComboBox.GetItems.FirstOrDefault(CheckBox => CheckBox.Text.Contains("주소"));
+            selectableColumnsComboBox.AddItemRange(columnNames ?? new string[0]);
+
+            // 주소 컬럼이 있으면 기본 선택합니다.
+            CheckBox checkBox = selectableColumnsComboBox.GetItems.FirstOrDefault(item => item.Text.Contains("주소"));
             if (checkBox != null)
                 checkBox.Checked = true;
+
             peopleLimitInput.Maximum = rowCount;
         }
-        #region UI
+
+        /// <summary>
+        /// 현재 UI 입력값으로 수량 조건 Rule을 생성합니다.
+        /// </summary>
+        public IConditionRule CreateRule()
+        {
+            return new QuantityConditionRule(PriorityLevel, PaintTarget, SelectedColor, GetSelectedColumnNames(), GoodsCount, PeopleLimit);
+        }
+
         [Category("Action")]
         [Description("Put PriorityLevel between 0~10")]
+        // 조건 우선순위입니다.
         public int PriorityLevel
         {
             get { return conditionCommonControl.PriorityLevel; }
             set { conditionCommonControl.PriorityLevel = value; }
         }
+
         [Category("Action")]
         [Description("Put Type of Painting Color")]
+        // 글자색/배경색 중 적용할 대상입니다.
         public PaintTarget PaintTarget
         {
             get { return conditionCommonControl.PaintTarget; }
             set { conditionCommonControl.PaintTarget = value; }
         }
+
         [Category("Action")]
         [Description("Put Color to Paint")]
+        // 조건에 적용할 색상입니다.
         public Color SelectedColor
         {
             get { return conditionCommonControl.SelectedColor; }
             set { conditionCommonControl.SelectedColor = value; }
         }
+
         [Category("Action")]
         [Description("Put Goods Count")]
+        // 조건 기준이 되는 총 상품 수량입니다.
         public int GoodsCount
         {
             get { return (int)goodsCountInput.Value; }
@@ -63,8 +91,10 @@ namespace ExcelConditionPainter
                 goodsCountInput.Value = value;
             }
         }
+
         [Category("Action")]
         [Description("Put Goods Count")]
+        // 조건을 적용할 최대 인원 수입니다.
         public int PeopleLimit
         {
             get { return (int)peopleLimitInput.Value; }
@@ -75,85 +105,24 @@ namespace ExcelConditionPainter
                 peopleLimitInput.Value = value;
             }
         }
+
+        /// <summary>
+        /// 체크된 컬럼명만 Rule 생성용으로 반환합니다.
+        /// </summary>
+        private string[] GetSelectedColumnNames()
+        {
+            return selectableColumnsComboBox.GetItems
+                .Where(item => item.Checked)
+                .Select(item => item.Text)
+                .ToArray();
+        }
+
+        /// <summary>
+        /// 삭제 버튼 클릭 시 현재 조건 컨트롤을 화면에서 제거합니다.
+        /// </summary>
         private void conditionCommonControl_DeleteButtonClick(object sender, EventArgs e)
         {
             Parent.Controls.Remove(this);
-        }
-        #endregion
-        public bool Evaluate(ConditionEvaluationContext conditionContext)
-        {
-            string[] selectedColumnNames = selectableColumnsComboBox.GetItems.Where(CheckBox => CheckBox.Checked).Select(CheckBox => CheckBox.Text).ToArray();
-            if (selectedColumnNames.Length == 0)
-                return false;
-
-            string primaryColumnName = conditionContext.PrimaryColumnName;
-            string buyCountColumnName = conditionContext.BuyCountColumnName;
-            string optionColumnName = conditionContext.OptionColumnName;
-            ReadOnlyDictionary<string, int> goodsQuantitiesByOption = conditionContext.GoodsQuantitiesByOption;
-            DataTable dataTable = conditionContext.ConditionTable;
-
-            // 그룹화 결과를 저장할 Dictionary Key
-            string selectedColumnsKey = string.Join("|", selectedColumnNames);
-            if (conditionContext.QuantityCalculationsBySelection.TryGetValue(selectedColumnsKey, out Dictionary<string, QuantityConditionCalculation> groupedCalculations) == false)
-            {
-                // 한번도 계산한게 없을때 계산 1회 실행 
-                groupedCalculations = new Dictionary<string, QuantityConditionCalculation>();
-                conditionContext.QuantityCalculationsBySelection[selectedColumnsKey] = groupedCalculations;
-                for (int i = 0; i < dataTable.Rows.Count; i++)
-                {
-                    DataRow dataRow = dataTable.Rows[i];
-                    string groupKey = string.Join("|", selectedColumnNames.Select(col => dataRow[col]));
-
-                    int buyCount = Convert.ToInt32(dataRow[buyCountColumnName]);
-                    string optionValue = dataRow[optionColumnName].ToString();
-                    int goodsQuantity = goodsQuantitiesByOption[optionValue]; // 무조건 있다고 가정하고 해야함
-
-                    string primaryValue = dataRow[primaryColumnName].ToString();
-                    int totalGoodsCount = buyCount * goodsQuantity;
-                    if (groupedCalculations.TryGetValue(groupKey, out QuantityConditionCalculation quantityCalculation))
-                        quantityCalculation.AddAdditionalData(primaryValue, totalGoodsCount);
-                    else
-                        groupedCalculations[groupKey] = new QuantityConditionCalculation(primaryValue, totalGoodsCount);
-                }
-            }
-
-            int peopleCount = 1;
-            //for (int i = 0; i < dataTable.Rows.Count; i++)
-            //{
-            //    DataRow dataRow = dataTable.Rows[i];
-            //    string groupKey = string.Join("|", selectedColumnNames.Select(col => dataRow[col]));
-            //    QuantityConditionCalculation quantityCalculation = groupedCalculations[groupKey];
-
-            //    int totalGoodsCount = quantityCalculation.TotalGoodsCount;
-            //    if (totalGoodsCount < GoodsCount)
-            //        continue;
-            //    string primaryValue = dataRow[primaryColumnName].ToString();
-            //    if (primaryValue.Equals(quantityCalculation.FirstRowPrimaryValue) == false)
-            //        continue;
-
-            //    if (conditionContext.TryAddCondition(quantityCalculation.FirstRowPrimaryValue, this) == false)
-            //        continue;
-            //    if (++peopleCount > PeopleLimit)
-            //        break;
-            //}
-            foreach (QuantityConditionCalculation quantityCalculation in groupedCalculations.Values)
-            {
-                int totalGoodsCount = quantityCalculation.TotalGoodsCount;
-                if (totalGoodsCount < GoodsCount)
-                    continue;
-                if (conditionContext.TryAddCondition(quantityCalculation.FirstRowPrimaryValue, this) == false)
-                    continue;
-                if (++peopleCount > PeopleLimit)
-                    break;
-            }
-            return peopleCount > 1;
-        }
-        public void PaintRow(DataGridViewRow row)
-        {
-            if (PaintTarget == PaintTarget.Font)// 글씨 색 변경
-                row.DefaultCellStyle.ForeColor = SelectedColor;
-            else // 배경색 변경
-                row.DefaultCellStyle.BackColor = SelectedColor;
         }
     }
 }
