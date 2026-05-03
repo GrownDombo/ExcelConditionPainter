@@ -32,7 +32,7 @@ Excel 파일을 불러온 뒤, 사용자가 지정한 조건에 따라 데이터
 - 조건 우선순위(Lv) 설정
 - Font / Fill 색상 지정
 - `Ctrl + F` 검색 기능
-- 결과 파일 저장 (`_Painted.xlsx`)
+- 결과 파일 저장 (`_Default` 파일 및 조건별 분리 파일)
 
 ---
 
@@ -56,6 +56,53 @@ Excel 파일을 불러온 뒤, 사용자가 지정한 조건에 따라 데이터
 
 ---
 
+## 구조와 적용 패턴
+
+최근 리팩토링을 통해 WinForms 이벤트 코드에 몰려 있던 책임을 서비스와 조건 전략으로 분리했습니다.
+
+- **Service Layer**
+  - `ExcelWorkbookService`: Excel 파일 읽기, 기본 Export, 조건별 분리 Export를 담당합니다.
+  - `ConditionEvaluationService`: 조건 Rule 목록을 우선순위대로 평가하고 결과 컨텍스트를 생성합니다.
+  - `GridPainter`: 조건 평가 결과를 `DataGridView`의 행/셀 색상으로 반영합니다.
+- **Strategy Pattern**
+  - `IConditionRule` 기반으로 중복, 수량, 옵션 구매 순서 등 조건별 계산 로직을 분리했습니다.
+  - WinForms 컨트롤은 UI 입력을 수집하고, 실제 계산은 Rule 객체가 수행합니다.
+- **Factory Pattern**
+  - `ConditionControlFactory`가 조건 타입에 맞는 조건 UI 컨트롤을 생성합니다.
+- **DTO / Settings Object**
+  - `ConditionPaintInstruction`이 조건 색칠 대상, 색상, 적용 순번 정보를 전달합니다.
+- **Adapter / Facade**
+  - ClosedXML 사용 세부사항은 `ExcelWorkbookService` 내부로 숨겨 Form 코드가 직접 알지 않도록 했습니다.
+
+---
+
+## 주요 코드 구조
+
+```text
+ExcelConditionPainter/
+├─ Class/
+│  ├─ ConditionEvaluationContext.cs      # 조건 평가 중 공유하는 입력 데이터, 캐시, 적용 결과 저장소
+│  ├─ ConditionGroupCalculation.cs       # 그룹별 첫 행 기본키, 추가 기본키, 누적 수량 계산 모델
+│  ├─ ConditionPaintInstruction.cs       # GridPainter가 사용할 색칠 대상/색상/순번 정보 객체
+│  └─ ConditionRules.cs                  # 중복, 수량, 옵션 구매 순서 등 실제 조건 계산 전략
+├─ Interface/
+│  └─ Conditions.cs                      # 조건 타입 enum, 색칠 설정, UI 컨트롤/Rule 인터페이스
+├─ Services/
+│  ├─ ConditionEvaluationService.cs      # 조건 Rule 목록을 우선순위대로 실행하고 평가 결과 생성
+│  ├─ ExcelWorkbookService.cs            # Excel 파일 읽기, 기본 Export, 조건별 분리 Export 처리
+│  ├─ ExcelExportResult.cs               # Export 후 생성 파일과 열 대상 경로를 담는 결과 객체
+│  └─ GridPainter.cs                     # 조건 평가 결과를 DataGridView 행/셀 스타일로 반영
+└─ UI/
+   ├─ FormSetConditions.cs               # 기본키, 정렬, 옵션 수량, 조건 목록을 설정하는 창
+   ├─ FormSearch.cs                      # Ctrl+F 검색과 검색 결과 위치 이동 창
+   ├─ FormOptions.cs                     # Export 옵션을 설정하고 저장하는 창
+   └─ Conditions/
+      ├─ ConditionControlFactory.cs      # 조건 타입에 맞는 조건 UI 컨트롤 생성
+      └─ *ConditionControl.cs            # 조건별 UI 입력을 수집하고 계산 Rule 생성
+```
+
+---
+
 ## 개발 환경
 
 - Visual Studio 2022
@@ -74,6 +121,12 @@ Excel 파일을 불러온 뒤, 사용자가 지정한 조건에 따라 데이터
 3. NuGet 패키지를 복원합니다.
 4. `ExcelConditionPainter` 프로젝트를 빌드합니다.
 5. 빌드된 실행 파일을 실행합니다.
+
+명령줄 빌드 예시는 다음과 같습니다.
+
+```powershell
+& 'C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Current\Bin\MSBuild.exe' ExcelConditionPainter\ExcelConditionPainter\ExcelConditionPainter.csproj /p:Configuration=Release /v:minimal
+```
 
 ### Run
 
@@ -122,7 +175,8 @@ Excel 파일을 불러온 뒤, 사용자가 지정한 조건에 따라 데이터
 ## 참고 사항
 
 - 결과 파일은 원본 파일을 덮어쓰지 않고 새 파일로 저장됩니다.
-- Export 결과 파일명에는 `_Painted.xlsx`가 붙습니다.
+- 기본 Export 결과 파일명에는 `_Default`가 붙습니다.
+- 조건별 분리 Export를 켜면 `ExcelPainter` 폴더 안에 조건 적용 순번별 파일이 추가로 생성됩니다.
 - Excel 파일 구조에 따라 조건 설정이 달라질 수 있습니다.
 - 실제 업무 데이터 적용 전 샘플 파일로 먼저 검증하는 것을 권장합니다.
 
