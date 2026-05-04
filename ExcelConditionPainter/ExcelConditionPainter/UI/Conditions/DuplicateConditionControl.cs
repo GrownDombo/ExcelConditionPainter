@@ -46,7 +46,7 @@ namespace ExcelConditionPainter
         /// </summary>
         public IConditionRule CreateRule()
         {
-            return new DuplicateConditionRule(PriorityLevel, PaintTarget, SelectedColor, GetSelectedColumnNames());
+            return new DuplicateConditionRule(PriorityLevel, PaintTarget, MatchMode, SelectedColor, GetSelectedColumnNames());
         }
 
         [Category("Action")]
@@ -65,6 +65,14 @@ namespace ExcelConditionPainter
         {
             get { return conditionCommonControl.PaintTarget; }
             set { conditionCommonControl.PaintTarget = value; }
+        }
+
+        [Category("Action")]
+        [Description("Put Multi Select Match Mode")]
+        public MultiSelectMatchMode MatchMode
+        {
+            get { return conditionCommonControl.MatchMode; }
+            set { conditionCommonControl.MatchMode = value; }
         }
 
         [Category("Action")]

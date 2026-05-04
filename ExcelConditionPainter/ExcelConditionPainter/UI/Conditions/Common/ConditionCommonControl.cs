@@ -6,13 +6,18 @@ using System.Windows.Forms;
 namespace ExcelConditionPainter
 {
     /// <summary>
-    /// 모든 조건 컨트롤에서 공통으로 쓰는 우선순위, 색상, 삭제 UI입니다.
+    /// 모든 조건 컨트롤에 공통으로 노출되는 매칭 방식, 우선순위, 색상, 삭제 UI입니다.
     /// </summary>
     public partial class ConditionCommonControl : UserControl, IConditionSettings
     {
+        private MultiSelectMatchMode matchMode = MultiSelectMatchMode.And;
+        private bool matchModeEnabled = true;
+
+        private const string MatchModeChangeToolTipText = "여러 컬럼 선택 시 AND/OR 검색을 변경합니다.";
+        private const string MatchModeDisabledToolTipText = "특정 옵션 구매 검색은 OR 검색만 지원합니다.";
+
         [Category("Action")]
         [Description("Put PriorityLevel between 0~10")]
-        // 조건 우선순위입니다.
         public int PriorityLevel
         {
             get { return (int)priorityLevelInput.Value; }
@@ -26,7 +31,6 @@ namespace ExcelConditionPainter
 
         [Category("Action")]
         [Description("Put Type of Painting Color")]
-        // 글자색/배경색 중 적용할 대상입니다.
         public PaintTarget PaintTarget
         {
             get { return (PaintTarget)Enum.Parse(typeof(PaintTarget), paintTargetButton.Text); }
@@ -34,8 +38,31 @@ namespace ExcelConditionPainter
         }
 
         [Category("Action")]
+        [Description("Put Multi Select Match Mode")]
+        public MultiSelectMatchMode MatchMode
+        {
+            get { return matchMode; }
+            set
+            {
+                matchMode = value;
+                UpdateMatchModeButton();
+            }
+        }
+
+        [Category("Action")]
+        [Description("Enable Multi Select Match Mode")]
+        public bool MatchModeEnabled
+        {
+            get { return matchModeEnabled; }
+            set
+            {
+                matchModeEnabled = value;
+                UpdateMatchModeButton();
+            }
+        }
+
+        [Category("Action")]
         [Description("Put Color to Paint")]
-        // 조건에 적용할 색상입니다.
         public Color SelectedColor
         {
             get { return colorComboBox.SelectedColor; }
@@ -44,24 +71,58 @@ namespace ExcelConditionPainter
 
         [Category("Action")]
         [Description("Occurs when the Delete button is clicked.")]
-        // 삭제 버튼 클릭을 부모 컨트롤에 알려주는 이벤트입니다.
         public event EventHandler DeleteButtonClick;
 
-        /// <summary>
-        /// 공통 조건 UI와 툴팁을 초기화합니다.
-        /// </summary>
         public ConditionCommonControl()
         {
             InitializeComponent();
+
+            UpdateMatchModeButton();
             paintTargetButton.Text = PaintTarget.Font.ToString();
             conditionToolTip.SetToolTip(priorityLevelInput, "조건 Level을 0~10 사이로 입력하세요.");
-            conditionToolTip.SetToolTip(paintTargetButton, "글자색 변경 or 셀 배경색 변경");
-            conditionToolTip.SetToolTip(deleteButton, "해당조건 제거.");
+            conditionToolTip.SetToolTip(paintTargetButton, "글자색 변경 또는 셀 배경색 변경");
+            conditionToolTip.SetToolTip(deleteButton, "해당 조건 제거");
         }
 
-        /// <summary>
-        /// 색칠 대상을 글자색과 배경색 사이에서 전환합니다.
-        /// </summary>
+        private void matchModeButton_Click(object sender, EventArgs e)
+        {
+            if (matchModeEnabled == false)
+            {
+                conditionToolTip.Show(MatchModeDisabledToolTipText, matchModeButton, 0, matchModeButton.Height + 2, 2000);
+                return;
+            }
+
+            MatchMode = matchMode == MultiSelectMatchMode.And
+                ? MultiSelectMatchMode.Or
+                : MultiSelectMatchMode.And;
+        }
+
+        private void UpdateMatchModeButton()
+        {
+            matchModeButton.Text = matchMode.ToString().ToUpper();
+            matchModeButton.BackColor = matchModeEnabled
+                ? Color.White
+                : Color.FromArgb(249, 250, 251);
+            matchModeButton.Cursor = matchModeEnabled
+                ? Cursors.Hand
+                : Cursors.No;
+            matchModeButton.FlatAppearance.BorderColor = matchModeEnabled
+                ? Color.FromArgb(156, 163, 175)
+                : Color.FromArgb(209, 213, 219);
+            matchModeButton.ForeColor = matchModeEnabled == false
+                ? Color.FromArgb(107, 114, 128)
+                : matchMode == MultiSelectMatchMode.And
+                ? Color.FromArgb(15, 118, 110)
+                : Color.FromArgb(29, 78, 216);
+
+            if (conditionToolTip != null)
+            {
+                conditionToolTip.SetToolTip(
+                    matchModeButton,
+                    matchModeEnabled ? MatchModeChangeToolTipText : MatchModeDisabledToolTipText);
+            }
+        }
+
         private void paintTargetButton_Click(object sender, EventArgs e)
         {
             if (paintTargetButton.Text == PaintTarget.Font.ToString())
@@ -70,9 +131,6 @@ namespace ExcelConditionPainter
                 paintTargetButton.Text = PaintTarget.Font.ToString();
         }
 
-        /// <summary>
-        /// 삭제 버튼 클릭 이벤트를 외부로 전달합니다.
-        /// </summary>
         private void deleteButton_Click(object sender, EventArgs e)
         {
             DeleteButtonClick?.Invoke(this, e);

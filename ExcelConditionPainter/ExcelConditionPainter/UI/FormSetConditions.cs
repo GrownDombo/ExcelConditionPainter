@@ -25,6 +25,21 @@ namespace ExcelConditionPainter
         // 조건 설정 완료 후 메인 폼에 전달할 평가 결과입니다.
         public ConditionEvaluationContext ConditionContext { get; private set; }
 
+        private sealed class ConditionRuleTypeComboBoxItem
+        {
+            public readonly ConditionRuleType RuleType;
+
+            public ConditionRuleTypeComboBoxItem(ConditionRuleType ruleType)
+            {
+                RuleType = ruleType;
+            }
+
+            public override string ToString()
+            {
+                return RuleType.GetDescription();
+            }
+        }
+
         /// <summary>
         /// 그리드 데이터의 컬럼을 분석하고 조건 설정 UI 기본값을 준비합니다.
         /// </summary>
@@ -119,9 +134,10 @@ namespace ExcelConditionPainter
             buyCountColumnComboBox.SelectedIndex = countColumnIndex < 0 ? 0 : countColumnIndex;
 
             foreach (ConditionRuleType conditionRuleType in Enum.GetValues(typeof(ConditionRuleType)))
-                addConditionComboBox.Items.Add(conditionRuleType.GetDescription());
+                addConditionComboBox.Items.Add(new ConditionRuleTypeComboBoxItem(conditionRuleType));
 
             addConditionComboBox.SelectedIndex = 0;
+            ApplyDefaultMatchModes();
 
             foreach (Control control in conditionFlowPanel.Controls)
             {
@@ -183,6 +199,7 @@ namespace ExcelConditionPainter
         /// </summary>
         private void addConditionButton_Click(object sender, EventArgs e)
         {
+            Control addedConditionControl = null;
             conditionFlowPanel.SuspendLayout();
             try
             {
@@ -194,7 +211,7 @@ namespace ExcelConditionPainter
                     .Max() + 1;
 
                 // 콤보박스에서 선택한 조건 타입입니다.
-                ConditionRuleType selectedRuleType = (ConditionRuleType)addConditionComboBox.SelectedIndex;
+                ConditionRuleType selectedRuleType = ((ConditionRuleTypeComboBoxItem)addConditionComboBox.SelectedItem).RuleType;
                 // Factory에서 생성한 조건 UI 컨트롤입니다.
                 IConditionControl conditionControl = ConditionControlFactory.Create(selectedRuleType, columnNames, optionNames, rowCount);
 
@@ -202,12 +219,19 @@ namespace ExcelConditionPainter
                     return;
 
                 conditionControl.PriorityLevel = nextPriorityLevel;
-                conditionFlowPanel.Controls.Add(conditionControl as Control);
+                conditionControl.MatchMode = AppOptions.GetDefaultMatchMode(selectedRuleType);
+                addedConditionControl = conditionControl as Control;
+                if (addedConditionControl == null)
+                    return;
+
+                conditionFlowPanel.Controls.Add(addedConditionControl);
             }
             finally
             {
                 conditionFlowPanel.ResumeLayout(false);
                 conditionFlowPanel.PerformLayout();
+                if (addedConditionControl != null)
+                    conditionFlowPanel.ScrollControlIntoView(addedConditionControl);
             }
         }
 
@@ -265,6 +289,14 @@ namespace ExcelConditionPainter
             {
                 MessageBox.Show(ex.Message);
             }
+        }
+
+        private void ApplyDefaultMatchModes()
+        {
+            duplicateConditionControl.MatchMode = AppOptions.GetDefaultMatchMode(ConditionRuleType.Duplicate);
+            distinctOrderConditionControl.MatchMode = AppOptions.GetDefaultMatchMode(ConditionRuleType.Order);
+            primaryQuantityConditionControl.MatchMode = AppOptions.GetDefaultMatchMode(ConditionRuleType.Quantity);
+            secondaryQuantityConditionControl.MatchMode = AppOptions.GetDefaultMatchMode(ConditionRuleType.Quantity);
         }
     }
 }

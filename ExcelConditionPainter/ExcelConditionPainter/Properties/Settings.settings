@@ -1,9 +1,21 @@
-﻿<?xml version='1.0' encoding='utf-8'?>
+<?xml version='1.0' encoding='utf-8'?>
 <SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="ExcelConditionPainter.Properties" GeneratedClassName="Settings">
   <Profiles />
   <Settings>
     <Setting Name="ExportSplitByConditions" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">True</Value>
+    </Setting>
+    <Setting Name="DefaultOrderMatchMode" Type="System.String" Scope="User">
+      <Value Profile="(Default)">And</Value>
+    </Setting>
+    <Setting Name="DefaultDuplicateMatchMode" Type="System.String" Scope="User">
+      <Value Profile="(Default)">And</Value>
+    </Setting>
+    <Setting Name="DefaultQuantityMatchMode" Type="System.String" Scope="User">
+      <Value Profile="(Default)">And</Value>
+    </Setting>
+    <Setting Name="DefaultOptionBuyOrderMatchMode" Type="System.String" Scope="User">
+      <Value Profile="(Default)">Or</Value>
     </Setting>
   </Settings>
 </SettingsFile>

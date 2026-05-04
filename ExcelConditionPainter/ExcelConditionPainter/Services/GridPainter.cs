@@ -20,7 +20,7 @@ namespace ExcelConditionPainter
             // 기본키 검색을 위해 그리드에 바인딩된 테이블을 다시 가져옵니다.
             DataTable dataTable = dataGridView.DataSource as DataTable;
 
-            foreach (KeyValuePair<string, List<IConditionRule>> conditionEntry in conditionContext.ConditionsByPrimaryValue)
+            foreach (KeyValuePair<string, List<ConditionMatch>> conditionEntry in conditionContext.ConditionsByPrimaryValue)
             {
                 // 조건이 적용된 기본키 값입니다.
                 string primaryValue = conditionEntry.Key;
@@ -31,8 +31,8 @@ namespace ExcelConditionPainter
 
                 // 실제 색칠할 그리드 행입니다.
                 DataGridViewRow row = dataGridView.Rows[rowIndex];
-                foreach (IConditionRule conditionRule in conditionEntry.Value)
-                    ApplyPaintInstruction(row, conditionRule.CreatePaintInstruction());
+                foreach (ConditionMatch conditionMatch in conditionEntry.Value)
+                    ApplyPaintInstruction(row, conditionMatch.CreatePaintInstruction());
             }
         }
 
@@ -62,9 +62,15 @@ namespace ExcelConditionPainter
         private void ApplyRowColor(DataGridViewRow row, PaintTarget paintTarget, Color color)
         {
             if (paintTarget == PaintTarget.Font)
+            {
                 row.DefaultCellStyle.ForeColor = color;
+                row.DefaultCellStyle.SelectionForeColor = color;
+            }
             else
+            {
                 row.DefaultCellStyle.BackColor = color;
+                row.DefaultCellStyle.SelectionBackColor = color;
+            }
         }
 
         /// <summary>
@@ -73,9 +79,15 @@ namespace ExcelConditionPainter
         private void ApplyCellColor(DataGridViewCell cell, PaintTarget paintTarget, Color color)
         {
             if (paintTarget == PaintTarget.Font)
+            {
                 cell.Style.ForeColor = color;
+                cell.Style.SelectionForeColor = color;
+            }
             else
+            {
                 cell.Style.BackColor = color;
+                cell.Style.SelectionBackColor = color;
+            }
         }
     }
 }

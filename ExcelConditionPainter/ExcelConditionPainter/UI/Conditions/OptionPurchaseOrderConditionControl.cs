@@ -69,6 +69,14 @@ namespace ExcelConditionPainter
         }
 
         [Category("Action")]
+        [Description("Put Multi Select Match Mode")]
+        public MultiSelectMatchMode MatchMode
+        {
+            get { return MultiSelectMatchMode.Or; }
+            set { conditionCommonControl.MatchMode = MultiSelectMatchMode.Or; }
+        }
+
+        [Category("Action")]
         [Description("Put Color to Paint")]
         // 조건에 적용할 색상입니다.
         public Color SelectedColor

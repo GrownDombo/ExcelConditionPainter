@@ -23,7 +23,7 @@ namespace ExcelConditionPainter
         #region Windows Form 디자이너에서 생성한 코드
 
         /// <summary>
-        /// 디자이너 지원에 필요한 메서드입니다. 
+        /// 디자이너 지원에 필요한 메서드입니다.
         /// 이 메서드의 내용을 코드 편집기로 수정하지 마세요.
         /// </summary>
         private void InitializeComponent()
@@ -46,9 +46,9 @@ namespace ExcelConditionPainter
             this.viewerHeaderPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.mainGridView)).BeginInit();
             this.SuspendLayout();
-            // 
+            //
             // mainMenuStrip
-            // 
+            //
             this.mainMenuStrip.BackColor = System.Drawing.Color.White;
             this.mainMenuStrip.Font = new System.Drawing.Font("Malgun Gothic", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
             this.mainMenuStrip.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(31)))), ((int)(((byte)(41)))), ((int)(((byte)(55)))));
@@ -63,27 +63,27 @@ namespace ExcelConditionPainter
             this.mainMenuStrip.Size = new System.Drawing.Size(1984, 31);
             this.mainMenuStrip.TabIndex = 0;
             this.mainMenuStrip.Text = "menuStrip1";
-            // 
+            //
             // openMenuItem
-            // 
+            //
             this.openMenuItem.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(31)))), ((int)(((byte)(41)))), ((int)(((byte)(55)))));
             this.openMenuItem.Name = "openMenuItem";
             this.openMenuItem.Padding = new System.Windows.Forms.Padding(8, 0, 8, 0);
             this.openMenuItem.Size = new System.Drawing.Size(59, 23);
             this.openMenuItem.Text = "Open";
             this.openMenuItem.Click += new System.EventHandler(this.openMenuItem_Click);
-            // 
+            //
             // helpMenuItem
-            // 
+            //
             this.helpMenuItem.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(31)))), ((int)(((byte)(41)))), ((int)(((byte)(55)))));
             this.helpMenuItem.Name = "helpMenuItem";
             this.helpMenuItem.Padding = new System.Windows.Forms.Padding(8, 0, 8, 0);
             this.helpMenuItem.Size = new System.Drawing.Size(55, 23);
             this.helpMenuItem.Text = "Help";
             this.helpMenuItem.Click += new System.EventHandler(this.helpMenuItem_Click);
-            // 
+            //
             // viewerPanel
-            // 
+            //
             this.viewerPanel.BackColor = System.Drawing.Color.White;
             this.viewerPanel.Controls.Add(this.mainGridView);
             this.viewerPanel.Controls.Add(this.viewerHeaderPanel);
@@ -93,13 +93,15 @@ namespace ExcelConditionPainter
             this.viewerPanel.Padding = new System.Windows.Forms.Padding(12, 0, 12, 12);
             this.viewerPanel.Size = new System.Drawing.Size(1984, 1230);
             this.viewerPanel.TabIndex = 8;
-            // 
+            //
             // mainGridView
-            // 
+            //
             this.mainGridView.AllowUserToAddRows = false;
             this.mainGridView.AllowUserToDeleteRows = false;
             this.mainGridView.AllowUserToResizeRows = false;
             dataGridViewCellStyle1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(250)))), ((int)(((byte)(250)))), ((int)(((byte)(250)))));
+            dataGridViewCellStyle1.SelectionBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(229)))), ((int)(((byte)(231)))), ((int)(((byte)(235)))));
+            dataGridViewCellStyle1.SelectionForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(31)))), ((int)(((byte)(41)))), ((int)(((byte)(55)))));
             this.mainGridView.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle1;
             this.mainGridView.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.AllCells;
             this.mainGridView.BackgroundColor = System.Drawing.Color.White;
@@ -119,8 +121,8 @@ namespace ExcelConditionPainter
             dataGridViewCellStyle3.BackColor = System.Drawing.Color.White;
             dataGridViewCellStyle3.Font = new System.Drawing.Font("Malgun Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
             dataGridViewCellStyle3.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(31)))), ((int)(((byte)(41)))), ((int)(((byte)(55)))));
-            dataGridViewCellStyle3.SelectionBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(153)))), ((int)(((byte)(246)))), ((int)(((byte)(228)))));
-            dataGridViewCellStyle3.SelectionForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(17)))), ((int)(((byte)(24)))), ((int)(((byte)(39)))));
+            dataGridViewCellStyle3.SelectionBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(229)))), ((int)(((byte)(231)))), ((int)(((byte)(235)))));
+            dataGridViewCellStyle3.SelectionForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(31)))), ((int)(((byte)(41)))), ((int)(((byte)(55)))));
             dataGridViewCellStyle3.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
             this.mainGridView.DefaultCellStyle = dataGridViewCellStyle3;
             this.mainGridView.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -131,7 +133,7 @@ namespace ExcelConditionPainter
             this.mainGridView.ReadOnly = true;
             this.mainGridView.RowHeadersWidth = 56;
             this.mainGridView.RowTemplate.Height = 28;
-            this.mainGridView.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
+            this.mainGridView.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.CellSelect;
             this.mainGridView.Size = new System.Drawing.Size(1960, 1174);
             this.mainGridView.TabIndex = 7;
             this.mainGridView.DataBindingComplete += new System.Windows.Forms.DataGridViewBindingCompleteEventHandler(this.mainGridView_DataBindingComplete);
@@ -164,7 +166,7 @@ namespace ExcelConditionPainter
             this.currentFileLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             //
             // viewerLabel
-            // 
+            //
             this.viewerLabel.BackColor = System.Drawing.Color.Transparent;
             this.viewerLabel.Dock = System.Windows.Forms.DockStyle.Left;
             this.viewerLabel.Font = new System.Drawing.Font("Malgun Gothic", 10.5F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
@@ -175,9 +177,9 @@ namespace ExcelConditionPainter
             this.viewerLabel.TabIndex = 6;
             this.viewerLabel.Text = "Excel Viewer";
             this.viewerLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            // 
+            //
             // exportButton
-            // 
+            //
             this.exportButton.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(15)))), ((int)(((byte)(118)))), ((int)(((byte)(110)))));
             this.exportButton.Dock = System.Windows.Forms.DockStyle.Right;
             this.exportButton.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(17)))), ((int)(((byte)(94)))), ((int)(((byte)(89)))));
@@ -192,18 +194,18 @@ namespace ExcelConditionPainter
             this.exportButton.Text = "Export";
             this.exportButton.UseVisualStyleBackColor = false;
             this.exportButton.Click += new System.EventHandler(this.exportButton_Click);
-            // 
+            //
             // optionsMenuItem
-            // 
+            //
             this.optionsMenuItem.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(31)))), ((int)(((byte)(41)))), ((int)(((byte)(55)))));
             this.optionsMenuItem.Name = "optionsMenuItem";
             this.optionsMenuItem.Padding = new System.Windows.Forms.Padding(8, 0, 8, 0);
             this.optionsMenuItem.Size = new System.Drawing.Size(75, 23);
             this.optionsMenuItem.Text = "Options";
             this.optionsMenuItem.Click += new System.EventHandler(this.optionsMenuItem_Click);
-            // 
+            //
             // FormMain
-            // 
+            //
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(243)))), ((int)(((byte)(244)))), ((int)(((byte)(246)))));

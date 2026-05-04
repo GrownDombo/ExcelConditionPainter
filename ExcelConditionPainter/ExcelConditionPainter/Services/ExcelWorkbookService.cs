@@ -104,13 +104,18 @@ namespace ExcelConditionPainter
                     DataRow row = dataTable.Rows[rowIndex];
                     // 조건 결과 Dictionary를 찾기 위한 기본키 값입니다.
                     string primaryKey = row[conditionContext.PrimaryColumnName].ToString();
-                    if (conditionContext.ConditionsByPrimaryValue.TryGetValue(primaryKey, out List<IConditionRule> conditionRules) == false)
+                    if (conditionContext.ConditionsByPrimaryValue.TryGetValue(primaryKey, out List<ConditionMatch> conditionMatches) == false)
                         continue;
 
-                    foreach (IConditionRule conditionRule in conditionRules)
+                    HashSet<int> exportedConditionIndexes = new HashSet<int>();
+                    foreach (ConditionMatch conditionMatch in conditionMatches)
                     {
+                        IConditionRule conditionRule = conditionMatch.ConditionRule;
                         // 조건별 파일명을 결정하는 적용 순번입니다.
                         int appliedConditionIndex = conditionRule.AppliedConditionIndex;
+                        if (exportedConditionIndexes.Add(appliedConditionIndex) == false)
+                            continue;
+
                         // 행을 추가할 대상 워크시트입니다.
                         IXLWorksheet worksheet;
                         if (workbooksByConditionIndex.TryGetValue(appliedConditionIndex, out XLWorkbook workbook))
