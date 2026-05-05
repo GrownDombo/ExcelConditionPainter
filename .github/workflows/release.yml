@@ -75,16 +75,19 @@ jobs:
 
           # 같은 버전의 Release가 이미 있으면 새 배포가 아니므로 이후 단계는 전부 스킵한다.
           gh release view $tag *> $null
-          if ($LASTEXITCODE -eq 0) {
+          $releaseViewExitCode = $LASTEXITCODE
+
+          if ($releaseViewExitCode -eq 0) {
             Write-Host "GitHub Release $tag already exists. Skipping deployment."
             "should_release=false" | Out-File -FilePath $env:GITHUB_OUTPUT -Append
-          } elseif ($LASTEXITCODE -eq 1) {
+          } elseif ($releaseViewExitCode -eq 1) {
             Write-Host "GitHub Release $tag does not exist. A new deployment will be created."
             "should_release=true" | Out-File -FilePath $env:GITHUB_OUTPUT -Append
           } else {
-            throw "Failed to check GitHub Release $tag. gh exit code: $LASTEXITCODE"
+            throw "Failed to check GitHub Release $tag. gh exit code: $releaseViewExitCode"
           }
 
+          $global:LASTEXITCODE = 0
           "version=$assemblyVersion" | Out-File -FilePath $env:GITHUB_OUTPUT -Append
           "installer_version=$installerVersion" | Out-File -FilePath $env:GITHUB_OUTPUT -Append
           "tag=$tag" | Out-File -FilePath $env:GITHUB_OUTPUT -Append
