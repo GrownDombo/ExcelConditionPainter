@@ -113,15 +113,38 @@ jobs:
         if: steps.release_info.outputs.should_release == 'true'
         run: |
           # .vdproj는 MSBuild만으로 빌드되지 않으므로 Visual Studio Installer Projects 확장을 설치한다.
+          # Setup 프로젝트 빌드에는 devenv.com이 필요하므로 Build Tools가 아닌 IDE 제품군만 선택한다.
           $vswhere = "${env:ProgramFiles(x86)}\Microsoft Visual Studio\Installer\vswhere.exe"
-          $vsPath = & $vswhere -latest -products * -requires Microsoft.Component.MSBuild -property installationPath
-          if (-not $vsPath) {
-            throw "Visual Studio installation path was not found."
+          $vsInfoJson = & $vswhere -latest -products Microsoft.VisualStudio.Product.Enterprise Microsoft.VisualStudio.Product.Professional Microsoft.VisualStudio.Product.Community -requires Microsoft.Component.MSBuild -format json
+          $vsInfo = ($vsInfoJson -join [Environment]::NewLine) | ConvertFrom-Json | Select-Object -First 1
+          if (-not $vsInfo) {
+            throw "Visual Studio IDE installation was not found."
           }
+
+          $vsPath = $vsInfo.installationPath
+          $vsMajorVersion = "$(($vsInfo.installationVersion -split '\.')[0]).0"
+          $vsInstanceId = $vsInfo.instanceId
+          Write-Host "Visual Studio path: $vsPath"
+          Write-Host "Visual Studio registry instance: ${vsMajorVersion}_${vsInstanceId}"
 
           $vsixInstaller = Join-Path $vsPath 'Common7\IDE\VSIXInstaller.exe'
           if (-not (Test-Path $vsixInstaller)) {
             throw "VSIXInstaller.exe was not found: $vsixInstaller"
+          }
+
+          function Set-OutOfProcBuildDisabled {
+            param(
+              [Parameter(Mandatory = $true)]
+              [string]$Version,
+              [Parameter(Mandatory = $true)]
+              [string]$InstanceId
+            )
+
+            # DisableOutOfProcBuild.exe가 hosted runner에서 VS 인스턴스를 못 찾을 때 같은 값을 레지스트리에 직접 쓴다.
+            $registryPath = "HKCU:\SOFTWARE\Microsoft\VisualStudio\${Version}_${InstanceId}_Config\MSBuild"
+            New-Item -Path $registryPath -Force | Out-Null
+            New-ItemProperty -Path $registryPath -Name 'EnableOutOfProcBuild' -Value 0 -PropertyType DWord -Force | Out-Null
+            Write-Host "Disabled out-of-proc build via registry: $registryPath"
           }
 
           $vsixPath = Join-Path $env:RUNNER_TEMP 'InstallerProjects2022.vsix'
@@ -136,14 +159,24 @@ jobs:
           # Visual Studio Installer Projects의 CI 빌드 안정성을 위해 out-of-proc build를 비활성화한다.
           $disableOutOfProcBuild = Join-Path $vsPath 'Common7\IDE\CommonExtensions\Microsoft\VSI\DisableOutOfProcBuild\DisableOutOfProcBuild.exe'
           if (Test-Path $disableOutOfProcBuild) {
-            & $disableOutOfProcBuild
-            if ($LASTEXITCODE -ne 0) {
-              throw "DisableOutOfProcBuild.exe failed with exit code $LASTEXITCODE."
+            Push-Location (Split-Path $disableOutOfProcBuild)
+            try {
+              & $disableOutOfProcBuild
+              $disableOutOfProcExitCode = $LASTEXITCODE
+            } finally {
+              Pop-Location
+            }
+
+            if ($disableOutOfProcExitCode -ne 0) {
+              Write-Warning "DisableOutOfProcBuild.exe failed with exit code $disableOutOfProcExitCode. Falling back to registry update."
+              Set-OutOfProcBuildDisabled -Version $vsMajorVersion -InstanceId $vsInstanceId
             }
           } else {
-            Write-Warning "DisableOutOfProcBuild.exe was not found. Continuing with the default Visual Studio build mode."
+            Write-Warning "DisableOutOfProcBuild.exe was not found. Falling back to registry update."
+            Set-OutOfProcBuildDisabled -Version $vsMajorVersion -InstanceId $vsInstanceId
           }
 
+          $global:LASTEXITCODE = 0
           "DEVENV_PATH=$(Join-Path $vsPath 'Common7\IDE\devenv.com')" | Out-File -FilePath $env:GITHUB_ENV -Append
 
       - name: Build setup project
