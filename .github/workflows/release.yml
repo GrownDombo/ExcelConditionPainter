@@ -1,0 +1,177 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v*.*.*'
+
+permissions:
+  contents: write
+
+defaults:
+  run:
+    shell: pwsh
+
+jobs:
+  release:
+    name: Build installer and publish GitHub Release
+    runs-on: windows-latest
+    env:
+      SOLUTION_PATH: ExcelConditionPainter\ExcelConditionPainter.sln
+      ASSEMBLY_INFO_PATH: ExcelConditionPainter\ExcelConditionPainter\Properties\AssemblyInfo.cs
+      SETUP_PROJECT_PATH: ExcelConditionPainter\ExcelConditionPainter.Setup\ExcelConditionPainter.Setup.vdproj
+      SETUP_PROJECT_NAME: ExcelConditionPainter.Setup
+      SETUP_RELEASE_DIR: ExcelConditionPainter\ExcelConditionPainter.Setup\Release
+      RELEASE_DIR: artifacts\release
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup NuGet
+        uses: NuGet/setup-nuget@v2
+
+      - name: Setup MSBuild
+        uses: microsoft/setup-msbuild@v2
+
+      - name: Restore NuGet packages
+        run: nuget restore $env:SOLUTION_PATH -NonInteractive
+
+      - name: Validate release version
+        run: |
+          $tag = '${{ github.ref_name }}'
+          if ($tag -notmatch '^v(?<version>\d+\.\d+\.\d+)$') {
+            throw "Release tag must use vX.Y.Z format. Actual tag: $tag"
+          }
+
+          $version = $Matches.version
+          $expectedAssemblyVersion = "$version.0"
+
+          $assemblyInfo = Get-Content $env:ASSEMBLY_INFO_PATH -Raw
+          $assemblyVersion = [regex]::Match($assemblyInfo, 'AssemblyVersion\("(?<value>\d+\.\d+\.\d+\.\d+)"\)').Groups['value'].Value
+          $fileVersion = [regex]::Match($assemblyInfo, 'AssemblyFileVersion\("(?<value>\d+\.\d+\.\d+\.\d+)"\)').Groups['value'].Value
+
+          if ($assemblyVersion -ne $expectedAssemblyVersion) {
+            throw "AssemblyVersion must be $expectedAssemblyVersion for tag $tag. Actual: $assemblyVersion"
+          }
+
+          if ($fileVersion -ne $expectedAssemblyVersion) {
+            throw "AssemblyFileVersion must be $expectedAssemblyVersion for tag $tag. Actual: $fileVersion"
+          }
+
+          $setupProject = Get-Content $env:SETUP_PROJECT_PATH -Raw
+          $productVersion = [regex]::Match($setupProject, '"ProductVersion"\s*=\s*"8:(?<value>\d+\.\d+\.\d+)"').Groups['value'].Value
+
+          if ($productVersion -ne $version) {
+            throw "Setup ProductVersion must be $version for tag $tag. Actual: $productVersion"
+          }
+
+          "Validated release version $version"
+
+      - name: Install Visual Studio Installer Projects
+        run: |
+          $vswhere = "${env:ProgramFiles(x86)}\Microsoft Visual Studio\Installer\vswhere.exe"
+          $vsPath = & $vswhere -latest -products * -requires Microsoft.Component.MSBuild -property installationPath
+          if (-not $vsPath) {
+            throw "Visual Studio installation path was not found."
+          }
+
+          $vsixInstaller = Join-Path $vsPath 'Common7\IDE\VSIXInstaller.exe'
+          if (-not (Test-Path $vsixInstaller)) {
+            throw "VSIXInstaller.exe was not found: $vsixInstaller"
+          }
+
+          $vsixPath = Join-Path $env:RUNNER_TEMP 'InstallerProjects2022.vsix'
+          $vsixUrl = 'https://marketplace.visualstudio.com/_apis/public/gallery/publishers/VisualStudioClient/vsextensions/MicrosoftVisualStudio2022InstallerProjects/latest/vspackage'
+          Invoke-WebRequest -Uri $vsixUrl -OutFile $vsixPath
+
+          & $vsixInstaller /q /a $vsixPath
+          if ($LASTEXITCODE -ne 0) {
+            throw "Visual Studio Installer Projects VSIX installation failed with exit code $LASTEXITCODE."
+          }
+
+          $disableOutOfProcBuild = Join-Path $vsPath 'Common7\IDE\CommonExtensions\Microsoft\VSI\DisableOutOfProcBuild\DisableOutOfProcBuild.exe'
+          if (Test-Path $disableOutOfProcBuild) {
+            & $disableOutOfProcBuild
+            if ($LASTEXITCODE -ne 0) {
+              throw "DisableOutOfProcBuild.exe failed with exit code $LASTEXITCODE."
+            }
+          } else {
+            Write-Warning "DisableOutOfProcBuild.exe was not found. Continuing with the default Visual Studio build mode."
+          }
+
+          "DEVENV_PATH=$(Join-Path $vsPath 'Common7\IDE\devenv.com')" | Out-File -FilePath $env:GITHUB_ENV -Append
+
+      - name: Build setup project
+        run: |
+          if (-not (Test-Path $env:DEVENV_PATH)) {
+            throw "devenv.com was not found: $env:DEVENV_PATH"
+          }
+
+          & $env:DEVENV_PATH $env:SOLUTION_PATH /Build "Release|Any CPU" /Project $env:SETUP_PROJECT_NAME
+          if ($LASTEXITCODE -ne 0) {
+            throw "Setup project build failed with exit code $LASTEXITCODE."
+          }
+
+      - name: Prepare release assets
+        run: |
+          $msiPath = Join-Path $env:SETUP_RELEASE_DIR 'ExcelConditionPainter.Setup.msi'
+          $setupPath = Join-Path $env:SETUP_RELEASE_DIR 'setup.exe'
+
+          if (-not (Test-Path $msiPath)) {
+            throw "MSI artifact was not found: $msiPath"
+          }
+
+          if (-not (Test-Path $setupPath)) {
+            throw "setup.exe artifact was not found: $setupPath"
+          }
+
+          New-Item -ItemType Directory -Force -Path $env:RELEASE_DIR | Out-Null
+          Copy-Item $msiPath (Join-Path $env:RELEASE_DIR 'ExcelConditionPainter.Setup.msi') -Force
+          Copy-Item $setupPath (Join-Path $env:RELEASE_DIR 'setup.exe') -Force
+
+          $assetPaths = @(
+            (Join-Path $env:RELEASE_DIR 'ExcelConditionPainter.Setup.msi'),
+            (Join-Path $env:RELEASE_DIR 'setup.exe')
+          )
+
+          $checksums = foreach ($assetPath in $assetPaths) {
+            $hash = Get-FileHash -Algorithm SHA256 $assetPath
+            '{0}  {1}' -f $hash.Hash.ToLowerInvariant(), (Split-Path $assetPath -Leaf)
+          }
+
+          $checksums | Set-Content -Path (Join-Path $env:RELEASE_DIR 'SHA256SUMS.txt') -Encoding ascii
+
+      - name: Upload workflow artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: ExcelConditionPainter-${{ github.ref_name }}
+          path: artifacts/release/*
+          if-no-files-found: error
+
+      - name: Ensure release does not already exist
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release view '${{ github.ref_name }}' *> $null
+          if ($LASTEXITCODE -eq 0) {
+            throw "GitHub Release '${{ github.ref_name }}' already exists."
+          }
+
+          if ($LASTEXITCODE -ne 1) {
+            throw "Failed to check GitHub Release '${{ github.ref_name }}'. gh exit code: $LASTEXITCODE"
+          }
+
+      - name: Create GitHub Release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release create '${{ github.ref_name }}' `
+            "$env:RELEASE_DIR\ExcelConditionPainter.Setup.msi#ExcelConditionPainter.Setup.msi" `
+            "$env:RELEASE_DIR\setup.exe#setup.exe" `
+            "$env:RELEASE_DIR\SHA256SUMS.txt#SHA256SUMS.txt" `
+            --verify-tag `
+            --generate-notes `
+            --title "ExcelConditionPainter ${{ github.ref_name }}"
