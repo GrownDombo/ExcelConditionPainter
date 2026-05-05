@@ -213,6 +213,7 @@ namespace ExcelConditionPainter
             this.Controls.Add(this.viewerPanel);
             this.Controls.Add(this.mainMenuStrip);
             this.Font = new System.Drawing.Font("Malgun Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
+            this.Icon = global::ExcelConditionPainter.Properties.Resources.AppIcon;
             this.MainMenuStrip = this.mainMenuStrip;
             this.Name = "FormMain";
             this.Text = "Condition Excel Painter";

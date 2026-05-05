@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" role="img" aria-label="Excel Condition Painter icon">
+  <defs>
+    <linearGradient id="sheet" x1="46" y1="18" x2="190" y2="226" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#ffffff"/>
+      <stop offset="1" stop-color="#eefaf5"/>
+    </linearGradient>
+    <linearGradient id="brush" x1="154" y1="150" x2="232" y2="222" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#0f766e"/>
+      <stop offset="1" stop-color="#22c55e"/>
+    </linearGradient>
+  </defs>
+  <rect width="256" height="256" rx="48" fill="#0f172a"/>
+  <path d="M56 24h94l50 50v134c0 13-11 24-24 24H56c-13 0-24-11-24-24V48c0-13 11-24 24-24z" fill="url(#sheet)"/>
+  <path d="M150 24v38c0 7 5 12 12 12h38L150 24z" fill="#c7f9e5"/>
+  <path d="M150 24v38c0 7 5 12 12 12h38" fill="none" stroke="#1f766b" stroke-width="7" stroke-linejoin="round"/>
+  <rect x="54" y="86" width="124" height="92" rx="8" fill="#ffffff" stroke="#0f766e" stroke-width="8"/>
+  <path d="M54 116h124M54 148h124M86 86v92M124 86v92" stroke="#9ee7cf" stroke-width="6"/>
+  <rect x="60" y="92" width="26" height="24" fill="#22c55e"/>
+  <rect x="86" y="116" width="38" height="32" fill="#14b8a6"/>
+  <rect x="124" y="148" width="54" height="30" fill="#84cc16"/>
+  <path d="M154 174l24-24 48 48-24 24-48-48z" fill="url(#brush)"/>
+  <path d="M143 185l11-11 48 48-11 11c-6 6-17 4-24-4l-20-20c-8-7-10-18-4-24z" fill="#f97316"/>
+  <path d="M178 150l9-9c5-5 13-5 18 0l29 29c5 5 5 13 0 18l-8 10-48-48z" fill="#f8fafc"/>
+  <path d="M178 150l48 48M154 174l48 48" stroke="#0f172a" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M70 202h60" stroke="#16a34a" stroke-width="12" stroke-linecap="round"/>
+</svg>

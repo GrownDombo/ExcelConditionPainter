@@ -12,6 +12,7 @@
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <Deterministic>true</Deterministic>
+    <ApplicationIcon>Images\AppIcon.ico</ApplicationIcon>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -202,6 +203,9 @@
   <ItemGroup>
     <Content Include="Dll\WinFormsCustomControls.dll" />
     <Content Include="Images\Add.png" />
+    <Content Include="Images\AppIcon.ico" />
+    <Content Include="Images\AppIcon.png" />
+    <Content Include="Images\AppIcon.svg" />
     <Content Include="Images\Delete.png" />
     <Content Include="Installers\ThirdPartyLicenses\THIRD-PARTY-NOTICES.txt" />
   </ItemGroup>

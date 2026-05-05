@@ -140,6 +140,26 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_E10F0BA9095542B58F2B4CE1547BC201"
+            {
+            "SourcePath" = "8:..\\ExcelConditionPainter\\Images\\AppIcon.ico"
+            "TargetName" = "8:AppIcon.ico"
+            "Tag" = "8:"
+            "Folder" = "8:_D84468DD7E28465C8EFE06B4C8215197"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_A10F0BA9095542B58F2B4CE1547BC101"
             {
             "SourcePath" = "8:..\\ExcelConditionPainter\\bin\\Release\\ExcelConditionPainter.exe"
@@ -282,8 +302,8 @@
             }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_A10F0BA9095542B58F2B4CE1547BC108"
             {
-            "SourcePath" = "8:..\\ExcelConditionPainter\\bin\\Release\\GDombo_CustomControl.dll"
-            "TargetName" = "8:GDombo_CustomControl.dll"
+            "SourcePath" = "8:..\\ExcelConditionPainter\\bin\\Release\\WinFormsCustomControls.dll"
+            "TargetName" = "8:WinFormsCustomControls.dll"
             "Tag" = "8:"
             "Folder" = "8:_D84468DD7E28465C8EFE06B4C8215197"
             "Condition" = "8:"
@@ -496,15 +516,15 @@
         {
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:ExcelConditionPainter"
-        "ProductCode" = "8:{CD8E006D-BCC4-4EF2-AAD4-663DD6E52F2B}"
-        "PackageCode" = "8:{A95370CE-FAB3-44BA-B083-24A28D938D78}"
+        "ProductCode" = "8:{F4ACFA6F-7A59-41B1-A8ED-1A5FF50D5BDC}"
+        "PackageCode" = "8:{F94A2770-E4B2-4742-80A2-6DD46E88ED1F}"
         "UpgradeCode" = "8:{9A8FAAF2-EE3F-46CC-AA3A-86F159C1BBB9}"
         "AspNetVersion" = "8:"
         "RestartWWWService" = "11:FALSE"
         "RemovePreviousVersions" = "11:TRUE"
         "DetectNewerInstalledVersion" = "11:TRUE"
         "InstallAllUsers" = "11:FALSE"
-        "ProductVersion" = "8:1.0.0"
+        "ProductVersion" = "8:1.0.1"
         "Manufacturer" = "8:GrownDombo"
         "ARPHELPTELEPHONE" = "8:"
         "ARPHELPLINK" = "8:"
@@ -514,7 +534,7 @@
         "Keywords" = "8:"
         "ARPCOMMENTS" = "8:"
         "ARPURLINFOABOUT" = "8:"
-        "ARPPRODUCTICON" = "8:"
+        "ARPPRODUCTICON" = "8:_E10F0BA9095542B58F2B4CE1547BC201"
         "ARPIconIndex" = "3:0"
         "SearchPath" = "8:"
         "UseSystemSearchPath" = "11:TRUE"
@@ -628,7 +648,7 @@
             "Target" = "8:_A10F0BA9095542B58F2B4CE1547BC101"
             "Folder" = "8:_ACE58FAC9A154C4D8EB7F7C18E12BCCA"
             "WorkingFolder" = "8:_D84468DD7E28465C8EFE06B4C8215197"
-            "Icon" = "8:"
+            "Icon" = "8:_E10F0BA9095542B58F2B4CE1547BC201"
             "Feature" = "8:"
             }
             "{970C0BB2-C7D0-45D7-ABFA-7EC378858BC0}:_682572B937E749D68C20EB1EB037D7E8"
@@ -642,7 +662,7 @@
             "Target" = "8:_A10F0BA9095542B58F2B4CE1547BC101"
             "Folder" = "8:_7503B555A5E949A7B7785AEFB5DA978F"
             "WorkingFolder" = "8:_D84468DD7E28465C8EFE06B4C8215197"
-            "Icon" = "8:"
+            "Icon" = "8:_E10F0BA9095542B58F2B4CE1547BC201"
             "Feature" = "8:"
             }
         }

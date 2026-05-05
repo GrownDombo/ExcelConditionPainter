@@ -198,6 +198,7 @@ namespace ExcelConditionPainter
             this.Controls.Add(this.saveButton);
             this.Controls.Add(this.exportSplitByConditionsCheckBox);
             this.Font = new System.Drawing.Font("Malgun Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
+            this.Icon = global::ExcelConditionPainter.Properties.Resources.AppIcon;
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.MinimumSize = new System.Drawing.Size(416, 319);

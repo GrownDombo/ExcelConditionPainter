@@ -181,6 +181,7 @@ namespace ExcelConditionPainter
             this.ClientSize = new System.Drawing.Size(760, 260);
             this.Controls.Add(this.mainLayoutPanel);
             this.Font = new System.Drawing.Font("Malgun Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
+            this.Icon = global::ExcelConditionPainter.Properties.Resources.AppIcon;
             this.MinimumSize = new System.Drawing.Size(640, 240);
             this.Name = "FormSearch";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
