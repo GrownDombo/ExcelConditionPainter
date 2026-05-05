@@ -28,7 +28,7 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
           fetch-depth: 0
 
@@ -89,17 +89,22 @@ jobs:
           "installer_version=$installerVersion" | Out-File -FilePath $env:GITHUB_OUTPUT -Append
           "tag=$tag" | Out-File -FilePath $env:GITHUB_OUTPUT -Append
 
-      - name: Setup NuGet
+      - name: Download NuGet
         if: steps.release_info.outputs.should_release == 'true'
-        uses: NuGet/setup-nuget@v2
-
-      - name: Setup MSBuild
-        if: steps.release_info.outputs.should_release == 'true'
-        uses: microsoft/setup-msbuild@v2
+        run: |
+          # Node 기반 setup action을 피하고 PowerShell로 nuget.exe를 직접 내려받는다.
+          $nugetPath = Join-Path $env:RUNNER_TEMP 'nuget.exe'
+          Invoke-WebRequest -Uri 'https://dist.nuget.org/win-x86-commandline/latest/nuget.exe' -OutFile $nugetPath
+          "NUGET_EXE=$nugetPath" | Out-File -FilePath $env:GITHUB_ENV -Append
 
       - name: Restore NuGet packages
         if: steps.release_info.outputs.should_release == 'true'
-        run: nuget restore $env:SOLUTION_PATH -NonInteractive
+        run: |
+          if (-not (Test-Path $env:NUGET_EXE)) {
+            throw "nuget.exe was not found: $env:NUGET_EXE"
+          }
+
+          & $env:NUGET_EXE restore $env:SOLUTION_PATH -NonInteractive
 
       - name: Install Visual Studio Installer Projects
         if: steps.release_info.outputs.should_release == 'true'
@@ -182,7 +187,7 @@ jobs:
 
       - name: Upload workflow artifact
         if: steps.release_info.outputs.should_release == 'true'
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: ExcelConditionPainter-${{ steps.release_info.outputs.tag }}
           path: artifacts/release/*
