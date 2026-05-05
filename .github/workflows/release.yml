@@ -1,9 +1,11 @@
 name: Release
 
+# main에 push될 때 AssemblyInfo.cs의 4자리 버전을 읽어 새 버전이면 Release를 만든다.
+# 이미 같은 vX.Y.Z.W Release가 있으면 빌드/배포를 건너뛰고 정상 종료한다.
 on:
   push:
-    tags:
-      - 'v*.*.*'
+    branches:
+      - main
 
 permissions:
   contents: write
@@ -30,48 +32,79 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Setup NuGet
-        uses: NuGet/setup-nuget@v2
-
-      - name: Setup MSBuild
-        uses: microsoft/setup-msbuild@v2
-
-      - name: Restore NuGet packages
-        run: nuget restore $env:SOLUTION_PATH -NonInteractive
-
-      - name: Validate release version
+      - name: Read version and decide release
+        id: release_info
+        env:
+          GH_TOKEN: ${{ github.token }}
         run: |
-          $tag = '${{ github.ref_name }}'
-          if ($tag -notmatch '^v(?<version>\d+\.\d+\.\d+)$') {
-            throw "Release tag must use vX.Y.Z format. Actual tag: $tag"
-          }
-
-          $version = $Matches.version
-          $expectedAssemblyVersion = "$version.0"
-
+          # GitHub Release 태그는 AssemblyInfo.cs의 4자리 버전을 그대로 사용한다. 예: 1.0.1.0 -> v1.0.1.0
           $assemblyInfo = Get-Content $env:ASSEMBLY_INFO_PATH -Raw
           $assemblyVersion = [regex]::Match($assemblyInfo, 'AssemblyVersion\("(?<value>\d+\.\d+\.\d+\.\d+)"\)').Groups['value'].Value
           $fileVersion = [regex]::Match($assemblyInfo, 'AssemblyFileVersion\("(?<value>\d+\.\d+\.\d+\.\d+)"\)').Groups['value'].Value
 
-          if ($assemblyVersion -ne $expectedAssemblyVersion) {
-            throw "AssemblyVersion must be $expectedAssemblyVersion for tag $tag. Actual: $assemblyVersion"
+          if (-not $assemblyVersion) {
+            throw "AssemblyVersion was not found in $env:ASSEMBLY_INFO_PATH."
           }
 
-          if ($fileVersion -ne $expectedAssemblyVersion) {
-            throw "AssemblyFileVersion must be $expectedAssemblyVersion for tag $tag. Actual: $fileVersion"
+          if (-not $fileVersion) {
+            throw "AssemblyFileVersion was not found in $env:ASSEMBLY_INFO_PATH."
           }
 
+          if ($assemblyVersion -ne $fileVersion) {
+            throw "AssemblyVersion and AssemblyFileVersion must match. AssemblyVersion: $assemblyVersion, AssemblyFileVersion: $fileVersion"
+          }
+
+          if ($assemblyVersion -notmatch '^(?<installerVersion>\d+\.\d+\.\d+)\.\d+$') {
+            throw "Assembly version must use X.Y.Z.W format for release automation. Actual: $assemblyVersion"
+          }
+
+          $installerVersion = $Matches.installerVersion
+          $tag = "v$assemblyVersion"
+
+          # Windows Installer ProductVersion은 3자리 버전이므로 AssemblyInfo의 앞 3자리와 비교한다.
           $setupProject = Get-Content $env:SETUP_PROJECT_PATH -Raw
           $productVersion = [regex]::Match($setupProject, '"ProductVersion"\s*=\s*"8:(?<value>\d+\.\d+\.\d+)"').Groups['value'].Value
 
-          if ($productVersion -ne $version) {
-            throw "Setup ProductVersion must be $version for tag $tag. Actual: $productVersion"
+          if (-not $productVersion) {
+            throw "Setup ProductVersion was not found in $env:SETUP_PROJECT_PATH."
           }
 
-          "Validated release version $version"
+          if ($productVersion -ne $installerVersion) {
+            throw "Setup ProductVersion must be $installerVersion for $tag. Actual: $productVersion"
+          }
+
+          # 같은 버전의 Release가 이미 있으면 새 배포가 아니므로 이후 단계는 전부 스킵한다.
+          gh release view $tag *> $null
+          if ($LASTEXITCODE -eq 0) {
+            Write-Host "GitHub Release $tag already exists. Skipping deployment."
+            "should_release=false" | Out-File -FilePath $env:GITHUB_OUTPUT -Append
+          } elseif ($LASTEXITCODE -eq 1) {
+            Write-Host "GitHub Release $tag does not exist. A new deployment will be created."
+            "should_release=true" | Out-File -FilePath $env:GITHUB_OUTPUT -Append
+          } else {
+            throw "Failed to check GitHub Release $tag. gh exit code: $LASTEXITCODE"
+          }
+
+          "version=$assemblyVersion" | Out-File -FilePath $env:GITHUB_OUTPUT -Append
+          "installer_version=$installerVersion" | Out-File -FilePath $env:GITHUB_OUTPUT -Append
+          "tag=$tag" | Out-File -FilePath $env:GITHUB_OUTPUT -Append
+
+      - name: Setup NuGet
+        if: steps.release_info.outputs.should_release == 'true'
+        uses: NuGet/setup-nuget@v2
+
+      - name: Setup MSBuild
+        if: steps.release_info.outputs.should_release == 'true'
+        uses: microsoft/setup-msbuild@v2
+
+      - name: Restore NuGet packages
+        if: steps.release_info.outputs.should_release == 'true'
+        run: nuget restore $env:SOLUTION_PATH -NonInteractive
 
       - name: Install Visual Studio Installer Projects
+        if: steps.release_info.outputs.should_release == 'true'
         run: |
+          # .vdproj는 MSBuild만으로 빌드되지 않으므로 Visual Studio Installer Projects 확장을 설치한다.
           $vswhere = "${env:ProgramFiles(x86)}\Microsoft Visual Studio\Installer\vswhere.exe"
           $vsPath = & $vswhere -latest -products * -requires Microsoft.Component.MSBuild -property installationPath
           if (-not $vsPath) {
@@ -92,6 +125,7 @@ jobs:
             throw "Visual Studio Installer Projects VSIX installation failed with exit code $LASTEXITCODE."
           }
 
+          # Visual Studio Installer Projects의 CI 빌드 안정성을 위해 out-of-proc build를 비활성화한다.
           $disableOutOfProcBuild = Join-Path $vsPath 'Common7\IDE\CommonExtensions\Microsoft\VSI\DisableOutOfProcBuild\DisableOutOfProcBuild.exe'
           if (Test-Path $disableOutOfProcBuild) {
             & $disableOutOfProcBuild
@@ -105,6 +139,7 @@ jobs:
           "DEVENV_PATH=$(Join-Path $vsPath 'Common7\IDE\devenv.com')" | Out-File -FilePath $env:GITHUB_ENV -Append
 
       - name: Build setup project
+        if: steps.release_info.outputs.should_release == 'true'
         run: |
           if (-not (Test-Path $env:DEVENV_PATH)) {
             throw "devenv.com was not found: $env:DEVENV_PATH"
@@ -116,6 +151,7 @@ jobs:
           }
 
       - name: Prepare release assets
+        if: steps.release_info.outputs.should_release == 'true'
         run: |
           $msiPath = Join-Path $env:SETUP_RELEASE_DIR 'ExcelConditionPainter.Setup.msi'
           $setupPath = Join-Path $env:SETUP_RELEASE_DIR 'setup.exe'
@@ -145,33 +181,35 @@ jobs:
           $checksums | Set-Content -Path (Join-Path $env:RELEASE_DIR 'SHA256SUMS.txt') -Encoding ascii
 
       - name: Upload workflow artifact
+        if: steps.release_info.outputs.should_release == 'true'
         uses: actions/upload-artifact@v4
         with:
-          name: ExcelConditionPainter-${{ github.ref_name }}
+          name: ExcelConditionPainter-${{ steps.release_info.outputs.tag }}
           path: artifacts/release/*
           if-no-files-found: error
 
-      - name: Ensure release does not already exist
-        env:
-          GH_TOKEN: ${{ github.token }}
+      - name: Create Git tag
+        if: steps.release_info.outputs.should_release == 'true'
         run: |
-          gh release view '${{ github.ref_name }}' *> $null
-          if ($LASTEXITCODE -eq 0) {
-            throw "GitHub Release '${{ github.ref_name }}' already exists."
-          }
+          # Release는 태그에 연결되므로 사람이 태그를 만들지 않아도 workflow가 현재 커밋에 태그를 생성한다.
+          $tag = '${{ steps.release_info.outputs.tag }}'
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
 
-          if ($LASTEXITCODE -ne 1) {
-            throw "Failed to check GitHub Release '${{ github.ref_name }}'. gh exit code: $LASTEXITCODE"
-          }
+          git tag $tag $env:GITHUB_SHA
+          git push origin $tag
 
       - name: Create GitHub Release
+        if: steps.release_info.outputs.should_release == 'true'
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          gh release create '${{ github.ref_name }}' `
+          $tag = '${{ steps.release_info.outputs.tag }}'
+
+          gh release create $tag `
             "$env:RELEASE_DIR\ExcelConditionPainter.Setup.msi#ExcelConditionPainter.Setup.msi" `
             "$env:RELEASE_DIR\setup.exe#setup.exe" `
             "$env:RELEASE_DIR\SHA256SUMS.txt#SHA256SUMS.txt" `
             --verify-tag `
             --generate-notes `
-            --title "ExcelConditionPainter ${{ github.ref_name }}"
+            --title "ExcelConditionPainter $tag"
