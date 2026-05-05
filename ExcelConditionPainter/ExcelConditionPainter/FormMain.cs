@@ -102,7 +102,7 @@ namespace ExcelConditionPainter
         /// </summary>
         private void helpMenuItem_Click(object sender, EventArgs e)
         {
-            Process.Start("https://growndombo.tistory.com/7");
+            Process.Start("https://growndombo.github.io/projects/excel-condition-painter");
         }
 
         /// <summary>

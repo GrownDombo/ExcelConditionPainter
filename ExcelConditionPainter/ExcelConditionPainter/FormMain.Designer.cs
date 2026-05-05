@@ -55,8 +55,8 @@ namespace ExcelConditionPainter
             this.mainMenuStrip.ImageScalingSize = new System.Drawing.Size(20, 20);
             this.mainMenuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.openMenuItem,
-            this.helpMenuItem,
-            this.optionsMenuItem});
+            this.optionsMenuItem,
+            this.helpMenuItem});
             this.mainMenuStrip.Location = new System.Drawing.Point(0, 0);
             this.mainMenuStrip.Name = "mainMenuStrip";
             this.mainMenuStrip.Padding = new System.Windows.Forms.Padding(12, 4, 0, 4);
